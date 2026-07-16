@@ -1,65 +1,75 @@
-import Image from "next/image";
+import Demo from "@/components/animated/demo";
+import { WebGLShader } from "@/components/animated/webgl-shader";
+
+const posts = [
+  {
+    slug: "golden-hour-in-the-dunes",
+    category: "Landscape",
+    title: "Golden Hour in the Dunes",
+    excerpt:
+      "Chasing the last light across shifting sand, and what forty minutes of waiting taught me about patience.",
+    date: "Jun 12, 2026",
+    readTime: "6 min read",
+    gradient: "from-fuchsia-500 via-purple-700 to-[#3d0745]",
+  },
+  {
+    slug: "shooting-weddings-in-the-rain",
+    category: "Weddings",
+    title: "Shooting Weddings in the Rain",
+    excerpt:
+      "Why the worst weather forecast of the season produced our favorite gallery yet.",
+    date: "May 28, 2026",
+    readTime: "8 min read",
+    gradient: "from-[#3d0745] via-purple-950 to-black",
+  },
+  {
+    slug: "a-portrait-lighting-primer",
+    category: "Technique",
+    title: "A Portrait Lighting Primer",
+    excerpt:
+      "Three light setups we return to again and again, broken down frame by frame.",
+    date: "May 09, 2026",
+    readTime: "5 min read",
+    gradient: "from-rose-500 via-fuchsia-700 to-[#3d0745]",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <div className="flex flex-1 flex-col font-sans bg-white dark:bg-black">
+      <main className="flex-1 isolate">
+
+
+
+        <WebGLShader />
+
+        <section className="relative isolate flex min-h-screen w-full flex-col items-center justify-center overflow-hidden">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,--theme(--color-primary/.2),transparent_60%)]"
+          />
+          <div className="mx-auto flex w-fit max-w-6xl flex-col items-center gap-2 rounded-4xl border border-white/30 px-6 py-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl sm:px-10 dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(0,0,0,0.2)]">
+            <h1 className="max-w-2xl text-4xl font-extrabold leading-tight tracking-tight text-zinc-950 dark:text-white sm:text-6xl sm:leading-tight">
+              Stories behind every frame we capture
+            </h1>
+            <p className="max-w-xl text-sm font-light leading-8 text-zinc-950 dark:text-white">
+              See through our eyes and discover a high you have never felt before.
+              Portraits, landscapes and Weddings. About us, the work we do and done,
+              and the moments that almost got away.
+            </p>
+          </div>
+        </section>
+        <section className="relative isolate flex w-full flex-col items-center justify-center">
+          <Demo />
+        </section>
+
       </main>
+
+      <footer className="border-t border-zinc-200 dark:border-zinc-800">
+        <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-4 px-6 py-4 text-sm text-zinc-500 dark:text-zinc-500 sm:flex-row sm:justify-between sm:px-10">
+          <span>{new Date().getFullYear()} Pixelite Studios</span>
+        </div>
+      </footer>
     </div>
   );
 }
