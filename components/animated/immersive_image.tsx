@@ -35,20 +35,26 @@ const ScrollExpandMedia = ({
     const [showContent, setShowContent] = useState<boolean>(false);
     const [mediaFullyExpanded, setMediaFullyExpanded] = useState<boolean>(false);
     const [isMobileState, setIsMobileState] = useState<boolean>(false);
+    const [prevMediaType, setPrevMediaType] = useState(mediaType);
 
     const sectionRef = useRef<HTMLDivElement | null>(null);
     const trackRef = useRef<HTMLDivElement | null>(null);
     const isInitialMount = useRef<boolean>(true);
 
-    // Reset when switching media type, and snap back to the start of this
-    // section's scroll track wherever it happens to sit on the page. Skip the
-    // scroll-into-view on first mount so the page opens at the top instead of
-    // jumping straight to this section.
-    useEffect(() => {
+    // Reset when switching media type. Done during render (rather than in an
+    // effect) so the reset is applied before paint instead of triggering an
+    // extra commit; see https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes.
+    if (mediaType !== prevMediaType) {
+        setPrevMediaType(mediaType);
         setScrollProgress(0);
         setShowContent(false);
         setMediaFullyExpanded(false);
+    }
 
+    // Snap back to the start of this section's scroll track wherever it
+    // happens to sit on the page. Skip the scroll-into-view on first mount so
+    // the page opens at the top instead of jumping straight to this section.
+    useEffect(() => {
         if (isInitialMount.current) {
             isInitialMount.current = false;
             return;

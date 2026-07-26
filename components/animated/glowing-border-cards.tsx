@@ -24,6 +24,20 @@ const sizeMap = {
     lg: 'w-80 h-96'
 };
 
+type GlowCardStyle = React.CSSProperties & {
+    '--base': number;
+    '--spread': number;
+    '--radius': string;
+    '--border': string;
+    '--backdrop': string;
+    '--backup-border': string;
+    '--size': string;
+    '--outer': string;
+    '--border-size': string;
+    '--spotlight-size': string;
+    '--hue': string;
+};
+
 const GlowCard: React.FC<GlowCardProps> = ({
     children,
     className = '',
@@ -62,8 +76,8 @@ const GlowCard: React.FC<GlowCardProps> = ({
         return sizeMap[size];
     };
 
-    const getInlineStyles = () => {
-        const baseStyles = {
+    const getInlineStyles = (): GlowCardStyle => {
+        const baseStyles: GlowCardStyle = {
             '--base': base,
             '--spread': spread,
             '--radius': '14',
