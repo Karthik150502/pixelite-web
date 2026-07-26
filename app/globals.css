@@ -3,8 +3,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --primary: #3d0745;
-  --primary: #3d0745;
+  --primary: #550361;
+  --accent: #a008b7;
 }
 
 @theme inline {
@@ -13,6 +13,7 @@
   --color-primary: var(--primary);
   --font-sans: var(--font-montserrat);
   --color-primary: var(--primary);
+  --color-accent: var(--accent);
   --font-sans: var(--font-montserrat);
   --font-mono: var(--font-geist-mono);
 }
@@ -21,8 +22,8 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
-    --primary: #db5def;
-    --primary: #db5def;
+    --primary: #550361;
+    --accent: #a008b7;
   }
 }
 

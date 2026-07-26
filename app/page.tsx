@@ -1,4 +1,5 @@
 import Demo from "@/components/animated/demo";
+import DemoTestimonials from "@/components/animated/demo-testimonials";
 import { WebGLShader } from "@/components/animated/webgl-shader";
 
 const posts = [
@@ -43,7 +44,7 @@ export default function Home() {
 
         <WebGLShader />
 
-        <section className="relative isolate flex min-h-screen w-full flex-col items-center justify-center overflow-hidden">
+        <section className="relative isolate flex min-h-screen w-full flex-col items-center justify-center overflow-hidden px-6 sm:px-0">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,--theme(--color-primary/.2),transparent_60%)]"
@@ -61,6 +62,9 @@ export default function Home() {
         </section>
         <section className="relative isolate flex w-full flex-col items-center justify-center">
           <Demo />
+        </section>
+        <section className="relative isolate flex w-full flex-col items-center justify-center">
+          <DemoTestimonials />
         </section>
 
       </main>

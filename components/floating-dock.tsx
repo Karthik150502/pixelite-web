@@ -73,7 +73,7 @@ function LinkContainer({
                 width,
                 height,
             }}
-            className={cn("p-2 flex items-center justify-center relative text-xs font-normal opacity-70 hover:opacity-100 transition-opacity duration-300", isActive ? "text-primary opacity-100 font-semibold" : "")}>
+            className={cn("p-2 flex items-center justify-center relative text-xs font-normal opacity-70 hover:opacity-100 transition-opacity duration-300", isActive ? "text-accent opacity-100 font-semibold" : "")}>
             {item.label}
         </motion.div>
     </Link>

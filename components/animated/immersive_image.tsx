@@ -38,13 +38,22 @@ const ScrollExpandMedia = ({
 
     const sectionRef = useRef<HTMLDivElement | null>(null);
     const trackRef = useRef<HTMLDivElement | null>(null);
+    const isInitialMount = useRef<boolean>(true);
 
     // Reset when switching media type, and snap back to the start of this
-    // section's scroll track wherever it happens to sit on the page.
+    // section's scroll track wherever it happens to sit on the page. Skip the
+    // scroll-into-view on first mount so the page opens at the top instead of
+    // jumping straight to this section.
     useEffect(() => {
         setScrollProgress(0);
         setShowContent(false);
         setMediaFullyExpanded(false);
+
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+            return;
+        }
+
         trackRef.current?.scrollIntoView({ block: 'start' });
     }, [mediaType]);
 
