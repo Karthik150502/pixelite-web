@@ -15,15 +15,18 @@ export default function Logo() {
             }}
             className="fixed left-6 top-4 z-50 sm:left-10"
         >
-            <Link href="/">
+            <Link href="/" className="mx-auto flex flex-row items-center gap-0">
                 <Image
                     src="/assets/brand/pixelite_logo_color_transparent.svg"
                     alt="Pixelite"
-                    width={60}
-                    height={60}
+                    width={65}
+                    height={65}
                     className="rounded-full"
                     priority
                 />
+                <p className="text-sm font-regular tracking-[0.2em] text-white">
+                    Pixelite Studios
+                </p>
             </Link>
         </motion.div>
     );
