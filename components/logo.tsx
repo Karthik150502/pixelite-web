@@ -24,7 +24,7 @@ export default function Logo() {
                     className="rounded-full"
                     priority
                 />
-                <p className="text-sm font-regular tracking-[0.2em] text-white">
+                <p className="hidden text-sm font-regular tracking-[0.2em] text-white md:block">
                     Pixelite Studios
                 </p>
             </Link>
