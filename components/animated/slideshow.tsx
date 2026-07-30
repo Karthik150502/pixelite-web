@@ -84,11 +84,16 @@ const COLLAPSED_WIDTH_PX = 35;
 const GAP_PX = 2;
 const MARGIN_PX = 2;
 
-function Thumbnails({ index, setIndex }: {
+const CONTROLS_HIDE_DELAY_MS = 15000;
+const THUMBNAILS_HEIGHT_PX = 88;
+const THUMBNAILS_GAP_PX = 12;
+
+function Thumbnails({ index, setIndex, controlsVisible }: {
     index: number,
-    setIndex: React.Dispatch<React.SetStateAction<number>>
+    setIndex: React.Dispatch<React.SetStateAction<number>>,
+    controlsVisible: boolean,
 }) {
-    const thumbnailsRef = useRef(null);
+    const thumbnailsRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (thumbnailsRef.current) {
@@ -111,10 +116,12 @@ function Thumbnails({ index, setIndex }: {
     }, [index]);
 
     return (
-        <div
+        <motion.div
             ref={thumbnailsRef}
             className='overflow-x-auto'
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', pointerEvents: controlsVisible ? 'auto' : 'none' }}
+            animate={{ opacity: controlsVisible ? 1 : 0, y: controlsVisible ? 0 : 40 }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
         >
             <style>{`
         .overflow-x-auto::-webkit-scrollbar {
@@ -154,7 +161,7 @@ function Thumbnails({ index, setIndex }: {
                     </motion.button>
                 ))}
             </div>
-        </div>
+        </motion.div>
     );
 }
 
@@ -162,7 +169,9 @@ export default function SlideShow() {
     const [index, setIndex] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const containerRef = useRef(null);
+    const [controlsVisible, setControlsVisible] = useState(true);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const x = useMotionValue(0);
 
@@ -171,6 +180,34 @@ export default function SlideShow() {
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, []);
+
+    // Controls are only ever auto-hidden while in fullscreen; outside of it they're always shown.
+    const effectiveControlsVisible = isFullscreen ? controlsVisible : true;
+
+    useEffect(() => {
+        if (!isFullscreen) {
+            if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+            return;
+        }
+
+        const armHideTimer = () => {
+            if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+            hideTimerRef.current = setTimeout(() => setControlsVisible(false), CONTROLS_HIDE_DELAY_MS);
+        };
+
+        const revealControls = () => {
+            setControlsVisible(true);
+            armHideTimer();
+        };
+
+        armHideTimer();
+        window.addEventListener('mousemove', revealControls);
+
+        return () => {
+            window.removeEventListener('mousemove', revealControls);
+            if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+        };
+    }, [isFullscreen]);
 
     const toggleFullscreen = () => {
         if (document.fullscreenElement) {
@@ -195,7 +232,7 @@ export default function SlideShow() {
 
     return (
         <div className='w-full h-screen'>
-            <div className='flex flex-col h-full gap-3'>
+            <div className='flex flex-col h-full'>
                 {/* Main Carousel */}
                 <div className='relative flex-1 min-h-0 overflow-hidden bg-black' ref={containerRef}>
                     <motion.div
@@ -252,76 +289,111 @@ export default function SlideShow() {
                     </motion.div>
 
                     {/* Previous Button */}
-                    <motion.button
-                        disabled={index === 0}
-                        onClick={() => setIndex((i) => Math.max(0, i - 1))}
-                        className={`absolute left-4 text-black top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform z-10
-              ${index === 0
-                                ? 'opacity-40 cursor-not-allowed'
-                                : 'bg-white hover:scale-110 hover:opacity-100 opacity-70'
-                            }`}
+                    <motion.div
+                        className='absolute left-4 top-1/2 -translate-y-1/2 z-10'
+                        style={{ pointerEvents: effectiveControlsVisible ? 'auto' : 'none' }}
+                        animate={{ opacity: effectiveControlsVisible ? 1 : 0, x: effectiveControlsVisible ? 0 : -20 }}
+                        transition={{ duration: 0.4, ease: 'easeInOut' }}
                     >
-                        <svg
-                            className='w-6 h-6'
-                            fill='none'
-                            stroke='currentColor'
-                            viewBox='0 0 24 24'
+                        <button
+                            disabled={index === 0}
+                            onClick={() => setIndex((i) => Math.max(0, i - 1))}
+                            className={`text-black w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform
+                  ${index === 0
+                                    ? 'opacity-40 cursor-not-allowed'
+                                    : 'bg-white hover:scale-110 hover:opacity-100 opacity-70'
+                                }`}
                         >
-                            <path
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                strokeWidth={2}
-                                d='M15 19l-7-7 7-7'
-                            />
-                        </svg>
-                    </motion.button>
+                            <svg
+                                className='w-6 h-6'
+                                fill='none'
+                                stroke='currentColor'
+                                viewBox='0 0 24 24'
+                            >
+                                <path
+                                    strokeLinecap='round'
+                                    strokeLinejoin='round'
+                                    strokeWidth={2}
+                                    d='M15 19l-7-7 7-7'
+                                />
+                            </svg>
+                        </button>
+                    </motion.div>
 
                     {/* Next Button */}
-                    <motion.button
-                        disabled={index === items.length - 1}
-                        onClick={() => setIndex((i) => Math.min(items.length - 1, i + 1))}
-                        className={`absolute text-black right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform z-10
-              ${index === items.length - 1
-                                ? 'opacity-40 cursor-not-allowed'
-                                : 'bg-white hover:scale-110 hover:opacity-100 opacity-70'
-                            }`}
+                    <motion.div
+                        className='absolute right-4 top-1/2 -translate-y-1/2 z-10'
+                        style={{ pointerEvents: effectiveControlsVisible ? 'auto' : 'none' }}
+                        animate={{ opacity: effectiveControlsVisible ? 1 : 0, x: effectiveControlsVisible ? 0 : 20 }}
+                        transition={{ duration: 0.4, ease: 'easeInOut' }}
                     >
-                        <svg
-                            className='w-6 h-6'
-                            fill='none'
-                            stroke='currentColor'
-                            viewBox='0 0 24 24'
+                        <button
+                            disabled={index === items.length - 1}
+                            onClick={() => setIndex((i) => Math.min(items.length - 1, i + 1))}
+                            className={`text-black w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform
+                  ${index === items.length - 1
+                                    ? 'opacity-40 cursor-not-allowed'
+                                    : 'bg-white hover:scale-110 hover:opacity-100 opacity-70'
+                                }`}
                         >
-                            <path
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                strokeWidth={2}
-                                d='M9 5l7 7-7 7'
-                            />
-                        </svg>
-                    </motion.button>
+                            <svg
+                                className='w-6 h-6'
+                                fill='none'
+                                stroke='currentColor'
+                                viewBox='0 0 24 24'
+                            >
+                                <path
+                                    strokeLinecap='round'
+                                    strokeLinejoin='round'
+                                    strokeWidth={2}
+                                    d='M9 5l7 7-7 7'
+                                />
+                            </svg>
+                        </button>
+                    </motion.div>
 
                     {/* Image Counter */}
-                    <div className='absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm'>
+                    <motion.div
+                        className='absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm'
+                        style={{ pointerEvents: effectiveControlsVisible ? 'auto' : 'none' }}
+                        animate={{ opacity: effectiveControlsVisible ? 1 : 0, y: effectiveControlsVisible ? 0 : 20 }}
+                        transition={{ duration: 0.4, ease: 'easeInOut' }}
+                    >
                         {index + 1} / {items.length}
-                    </div>
+                    </motion.div>
                 </div>
 
-                <Thumbnails index={index} setIndex={setIndex} />
+                <motion.div
+                    className='overflow-hidden shrink-0'
+                    animate={{
+                        height: effectiveControlsVisible ? THUMBNAILS_HEIGHT_PX : 0,
+                        marginTop: effectiveControlsVisible ? THUMBNAILS_GAP_PX : 0,
+                    }}
+                    transition={{ duration: 0.4, ease: 'easeInOut' }}
+                >
+                    <Thumbnails index={index} setIndex={setIndex} controlsVisible={effectiveControlsVisible} />
+                </motion.div>
             </div>
 
             {/* Fullscreen Toggle */}
-            <motion.button
-                onClick={toggleFullscreen}
-                aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
-                className='fixed right-4 bottom-4 text-black w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform z-40 bg-white hover:scale-110 hover:opacity-100 opacity-50'
+            <motion.div
+                className='fixed right-4 bottom-4 z-40'
+                style={{ pointerEvents: effectiveControlsVisible ? 'auto' : 'none' }}
+                animate={{ opacity: effectiveControlsVisible ? 1 : 0, y: effectiveControlsVisible ? 0 : 20 }}
+                transition={{ duration: 0.4, ease: 'easeInOut' }}
             >
-                {isFullscreen ? (
-                    <Minimize2 className='w-5 h-5' />
-                ) : (
-                    <Maximize2 className='w-5 h-5' />
-                )}
-            </motion.button>
+                <button
+                    onClick={toggleFullscreen}
+                    aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+                    className='text-black w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform bg-white hover:scale-110 hover:opacity-100 opacity-50'
+                >
+                    {isFullscreen ? (
+                        <Minimize2 className='w-5 h-5' />
+                    ) : (
+                        <Maximize2 className='w-5 h-5' />
+                    )}
+                </button>
+            </motion.div>
         </div>
     );
 }
