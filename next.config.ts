@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
       {
         protocol: 'https',
-        hostname: '://dropboxusercontent.com',
+        hostname: 'dl.dropboxusercontent.com',
         port: '',
         pathname: '/**',
       },

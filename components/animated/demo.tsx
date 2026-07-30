@@ -29,7 +29,7 @@ const sampleMediaContent: MediaContentCollection = {
         poster:
             'https://images.pexels.com/videos/5752729/space-earth-universe-cosmos-5752729.jpeg',
         background:
-            'https://www.dropbox.com/scl/fi/58ib1gm0njzzlmpzacaxb/wp15155293.jpg?rlkey=urbw48p135mwl16taoi9h4oy2&st=mweusarg&dl=0',
+            'https://dl.dropboxusercontent.com/scl/fi/58ib1gm0njzzlmpzacaxb/wp15155293.jpg?rlkey=urbw48p135mwl16taoi9h4oy2&st=mweusarg',
         title: "Julia and Jacob's journey",
         // date: 'Anjali and Arjun',
         scrollToExpand: 'Scroll to Expand Demo',
