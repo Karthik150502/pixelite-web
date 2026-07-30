@@ -3,13 +3,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Logo() {
-    const [inTopSection, setInTopSection] = useState(true);
+    const pathname = usePathname();
+    const isHomePage = pathname === "/";
+
     const [ready, setReady] = useState(false);
+    const [inTopSection, setInTopSection] = useState(true);
     const [isFullscreen, setIsFullscreen] = useState(false);
 
     useEffect(() => {
+        if (!isHomePage) return;
+
         const heroSection = document.getElementById("hero-section");
         if (!heroSection) return;
 
@@ -20,7 +26,7 @@ export default function Logo() {
         observer.observe(heroSection);
 
         return () => observer.disconnect();
-    }, []);
+    }, [isHomePage]);
 
     useEffect(() => {
         const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
