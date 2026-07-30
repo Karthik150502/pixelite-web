@@ -1,3 +1,4 @@
+import { LetsWorkTogether } from "@/components/animated/call-for-action";
 import Demo from "@/components/animated/demo";
 import DemoMarquee from "@/components/animated/demo-marquee";
 import DemoTestimonials from "@/components/animated/demo-testimonials";
@@ -45,7 +46,7 @@ export default function Home() {
 
         <WebGLShader />
 
-        <section className="relative isolate flex min-h-screen w-full flex-col items-center justify-center overflow-hidden px-6 sm:px-0">
+        <section id="hero-section" className="relative isolate flex min-h-screen w-full flex-col items-center justify-center overflow-hidden px-6 sm:px-0">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,--theme(--color-primary/.2),transparent_60%)]"
@@ -69,6 +70,9 @@ export default function Home() {
         </section>
         <section className="relative isolate flex w-full flex-col items-center justify-center">
           <DemoTestimonials />
+        </section>
+        <section className="relative isolate flex w-full flex-col items-center justify-center">
+          <LetsWorkTogether />
         </section>
 
       </main>

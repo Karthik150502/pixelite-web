@@ -2,17 +2,39 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 export default function Logo() {
+    const [inTopSection, setInTopSection] = useState(true);
+    const [ready, setReady] = useState(false);
+
+    useEffect(() => {
+        const heroSection = document.getElementById("hero-section");
+        if (!heroSection) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => setInTopSection(entry.isIntersecting),
+            { threshold: 0 }
+        );
+        observer.observe(heroSection);
+
+        return () => observer.disconnect();
+    }, []);
+
     return (
         <motion.div
             initial={{ opacity: 0, y: -40, filter: "blur(5px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{
-                delay: 0.3,
-                duration: 0.5,
-                ease: "easeInOut",
-            }}
+            animate={
+                ready && !inTopSection
+                    ? { opacity: 0, y: -80, filter: "blur(0px)" }
+                    : { opacity: 1, y: 0, filter: "blur(0px)" }
+            }
+            transition={
+                ready
+                    ? { duration: 0.3, ease: "easeInOut" }
+                    : { delay: 0.3, duration: 0.5, ease: "easeInOut" }
+            }
+            onAnimationComplete={() => setReady(true)}
             className="fixed left-6 top-4 z-50 sm:left-10"
         >
             <Link href="/" className="mx-auto flex flex-row items-center gap-0">
