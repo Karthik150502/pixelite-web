@@ -5,3 +5,4 @@ export const NavbarItems = [
   { id: 5, href: "/pricing", label: "pricing" },
   { id: 6, href: "/about", label: "about" },
 ];
+
