@@ -84,9 +84,7 @@ const COLLAPSED_WIDTH_PX = 35;
 const GAP_PX = 2;
 const MARGIN_PX = 2;
 
-const CONTROLS_HIDE_DELAY_MS = 15000;
-const THUMBNAILS_HEIGHT_PX = 88;
-const THUMBNAILS_GAP_PX = 12;
+const CONTROLS_HIDE_DELAY_MS = 5000;
 
 function Thumbnails({ index, setIndex, controlsVisible }: {
     index: number,
@@ -118,7 +116,7 @@ function Thumbnails({ index, setIndex, controlsVisible }: {
     return (
         <motion.div
             ref={thumbnailsRef}
-            className='overflow-x-auto'
+            className='overflow-x-auto pb-4 px-4'
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', pointerEvents: controlsVisible ? 'auto' : 'none' }}
             animate={{ opacity: controlsVisible ? 1 : 0, y: controlsVisible ? 0 : 40 }}
             transition={{ duration: 0.4, ease: 'easeInOut' }}
@@ -170,6 +168,8 @@ export default function SlideShow() {
     const [isDragging, setIsDragging] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [controlsVisible, setControlsVisible] = useState(true);
+    const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+    const [naturalSizes, setNaturalSizes] = useState<Record<number, { width: number, height: number }>>({});
     const containerRef = useRef<HTMLDivElement>(null);
     const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -180,6 +180,37 @@ export default function SlideShow() {
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, []);
+
+    // Track the carousel's box so we can work out exactly where each
+    // object-contain image is actually rendered (it's letterboxed inside a full-size box).
+    useEffect(() => {
+        const el = containerRef.current;
+        if (!el) return;
+
+        const updateSize = () => setContainerSize({ width: el.offsetWidth, height: el.offsetHeight });
+        updateSize();
+
+        const observer = new ResizeObserver(updateSize);
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
+
+    // Given the container's box and an image's natural dimensions, work out the
+    // rectangle the image is actually drawn into (object-contain letterboxes it).
+    const getImageRect = (itemId: number) => {
+        const natural = naturalSizes[itemId];
+        if (!natural || !containerSize.width || !containerSize.height) return null;
+
+        const scale = Math.min(containerSize.width / natural.width, containerSize.height / natural.height);
+        const renderedWidth = natural.width * scale;
+        const renderedHeight = natural.height * scale;
+
+        return {
+            left: (containerSize.width - renderedWidth) / 2,
+            width: renderedWidth,
+            bottom: (containerSize.height - renderedHeight) / 2,
+        };
+    };
 
     // Controls are only ever auto-hidden while in fullscreen; outside of it they're always shown.
     const effectiveControlsVisible = isFullscreen ? controlsVisible : true;
@@ -200,11 +231,23 @@ export default function SlideShow() {
             armHideTimer();
         };
 
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowLeft') {
+                setIndex((i) => Math.max(0, i - 1));
+                revealControls();
+            } else if (e.key === 'ArrowRight') {
+                setIndex((i) => Math.min(items.length - 1, i + 1));
+                revealControls();
+            }
+        };
+
         armHideTimer();
         window.addEventListener('mousemove', revealControls);
+        window.addEventListener('keydown', handleKeyDown);
 
         return () => {
             window.removeEventListener('mousemove', revealControls);
+            window.removeEventListener('keydown', handleKeyDown);
             if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
         };
     }, [isFullscreen]);
@@ -231,41 +274,53 @@ export default function SlideShow() {
     }, [index, x, isDragging]);
 
     return (
-        <div className='w-full h-screen'>
-            <div className='flex flex-col h-full'>
-                {/* Main Carousel */}
-                <div className='relative flex-1 min-h-0 overflow-hidden bg-black' ref={containerRef}>
-                    <motion.div
-                        className='flex h-full'
-                        drag='x'
-                        dragElastic={0.2}
-                        dragMomentum={false}
-                        onDragStart={() => setIsDragging(true)}
-                        onDragEnd={(e, info) => {
-                            setIsDragging(false);
-                            const containerWidth = containerRef.current?.offsetWidth || 1;
-                            const offset = info.offset.x;
-                            const velocity = info.velocity.x;
+        <div className='relative w-full h-screen'>
+            {/* Main Carousel */}
+            <div className='absolute inset-0 overflow-hidden bg-black' ref={containerRef}>
+                <motion.div
+                    className='flex h-full'
+                    drag='x'
+                    dragElastic={0.2}
+                    dragMomentum={false}
+                    onDragStart={() => setIsDragging(true)}
+                    onDragEnd={(e, info) => {
+                        setIsDragging(false);
+                        const containerWidth = containerRef.current?.offsetWidth || 1;
+                        const offset = info.offset.x;
+                        const velocity = info.velocity.x;
 
-                            let newIndex = index;
+                        let newIndex = index;
 
-                            // If fast swipe, use velocity
-                            if (Math.abs(velocity) > 500) {
-                                newIndex = velocity > 0 ? index - 1 : index + 1;
-                            }
-                            // Otherwise use offset threshold (30% of container width)
-                            else if (Math.abs(offset) > containerWidth * 0.3) {
-                                newIndex = offset > 0 ? index - 1 : index + 1;
-                            }
+                        // If fast swipe, use velocity
+                        if (Math.abs(velocity) > 500) {
+                            newIndex = velocity > 0 ? index - 1 : index + 1;
+                        }
+                        // Otherwise use offset threshold (30% of container width)
+                        else if (Math.abs(offset) > containerWidth * 0.3) {
+                            newIndex = offset > 0 ? index - 1 : index + 1;
+                        }
 
-                            // Clamp index
-                            newIndex = Math.max(0, Math.min(items.length - 1, newIndex));
-                            setIndex(newIndex);
-                        }}
-                        style={{ x }}
-                    >
-                        {items.map((item, i) => (
-                            <div key={item.id} className='relative shrink-0 w-full h-full'>
+                        // Clamp index
+                        newIndex = Math.max(0, Math.min(items.length - 1, newIndex));
+                        setIndex(newIndex);
+                    }}
+                    style={{ x }}
+                >
+                    {items.map((item, i) => {
+                        const imageRect = getImageRect(item.id);
+
+                        return (
+                            <div key={item.id} className='relative shrink-0 w-full h-full overflow-hidden'>
+                                <Image
+                                    src={item.url}
+                                    alt=''
+                                    aria-hidden='true'
+                                    fill
+                                    sizes='100vw'
+                                    loading={i === 0 ? 'eager' : 'lazy'}
+                                    className='object-cover scale-110 blur-2xl select-none pointer-events-none'
+                                    draggable={false}
+                                />
                                 <Image
                                     src={item.url}
                                     alt={item.title}
@@ -273,106 +328,120 @@ export default function SlideShow() {
                                     sizes='100vw'
                                     loading={i === 0 ? 'eager' : 'lazy'}
                                     fetchPriority={i === 0 ? 'high' : 'auto'}
-                                    className='object-contain select-none pointer-events-none'
+                                    className='relative object-contain select-none pointer-events-none'
                                     draggable={false}
+                                    onLoad={(e) => {
+                                        const img = e.currentTarget;
+                                        setNaturalSizes((prev) => ({
+                                            ...prev,
+                                            [item.id]: { width: img.naturalWidth, height: img.naturalHeight },
+                                        }));
+                                    }}
                                 />
-                                <div className='absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent pt-16 pb-6 px-6 text-right'>
-                                    <p className='uppercase text-white font-semibold tracking-wide text-2xl sm:text-3xl'>
-                                        {item.title}
-                                    </p>
-                                    <p className='lowercase text-white/80 text-sm sm:text-base whitespace-pre-line'>
-                                        {item.subTitle}
-                                    </p>
-                                </div>
+                                {imageRect && (
+                                    <motion.div
+                                        className='absolute pt-16 pb-6 px-6 text-right'
+                                        style={{
+                                            left: imageRect.left,
+                                            width: imageRect.width,
+                                            textShadow: '2px 3px 6px rgba(0,0,0,0.85)',
+                                        }}
+                                        animate={{
+                                            bottom: effectiveControlsVisible ? imageRect.bottom + 75 : imageRect.bottom + 8,
+                                        }}
+                                        transition={{ duration: 0.4, ease: 'easeInOut' }}
+                                    >
+                                        <p className='uppercase text-white font-semibold tracking-wide text-xl sm:text-2xl'>
+                                            {item.title}
+                                        </p>
+                                        <p className='lowercase text-white text-sm m:text-base whitespace-pre-line'>
+                                            {item.subTitle}
+                                        </p>
+                                    </motion.div>
+                                )}
                             </div>
-                        ))}
-                    </motion.div>
+                        );
+                    })}
+                </motion.div>
 
-                    {/* Previous Button */}
-                    <motion.div
-                        className='absolute left-4 top-1/2 -translate-y-1/2 z-10'
-                        style={{ pointerEvents: effectiveControlsVisible ? 'auto' : 'none' }}
-                        animate={{ opacity: effectiveControlsVisible ? 1 : 0, x: effectiveControlsVisible ? 0 : -20 }}
-                        transition={{ duration: 0.4, ease: 'easeInOut' }}
-                    >
-                        <button
-                            disabled={index === 0}
-                            onClick={() => setIndex((i) => Math.max(0, i - 1))}
-                            className={`text-black w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform
-                  ${index === 0
-                                    ? 'opacity-40 cursor-not-allowed'
-                                    : 'bg-white hover:scale-110 hover:opacity-100 opacity-70'
-                                }`}
-                        >
-                            <svg
-                                className='w-6 h-6'
-                                fill='none'
-                                stroke='currentColor'
-                                viewBox='0 0 24 24'
-                            >
-                                <path
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                    strokeWidth={2}
-                                    d='M15 19l-7-7 7-7'
-                                />
-                            </svg>
-                        </button>
-                    </motion.div>
-
-                    {/* Next Button */}
-                    <motion.div
-                        className='absolute right-4 top-1/2 -translate-y-1/2 z-10'
-                        style={{ pointerEvents: effectiveControlsVisible ? 'auto' : 'none' }}
-                        animate={{ opacity: effectiveControlsVisible ? 1 : 0, x: effectiveControlsVisible ? 0 : 20 }}
-                        transition={{ duration: 0.4, ease: 'easeInOut' }}
-                    >
-                        <button
-                            disabled={index === items.length - 1}
-                            onClick={() => setIndex((i) => Math.min(items.length - 1, i + 1))}
-                            className={`text-black w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform
-                  ${index === items.length - 1
-                                    ? 'opacity-40 cursor-not-allowed'
-                                    : 'bg-white hover:scale-110 hover:opacity-100 opacity-70'
-                                }`}
-                        >
-                            <svg
-                                className='w-6 h-6'
-                                fill='none'
-                                stroke='currentColor'
-                                viewBox='0 0 24 24'
-                            >
-                                <path
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                    strokeWidth={2}
-                                    d='M9 5l7 7-7 7'
-                                />
-                            </svg>
-                        </button>
-                    </motion.div>
-
-                    {/* Image Counter */}
-                    <motion.div
-                        className='absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm'
-                        style={{ pointerEvents: effectiveControlsVisible ? 'auto' : 'none' }}
-                        animate={{ opacity: effectiveControlsVisible ? 1 : 0, y: effectiveControlsVisible ? 0 : 20 }}
-                        transition={{ duration: 0.4, ease: 'easeInOut' }}
-                    >
-                        {index + 1} / {items.length}
-                    </motion.div>
-                </div>
-
+                {/* Previous Button */}
                 <motion.div
-                    className='overflow-hidden shrink-0'
-                    animate={{
-                        height: effectiveControlsVisible ? THUMBNAILS_HEIGHT_PX : 0,
-                        marginTop: effectiveControlsVisible ? THUMBNAILS_GAP_PX : 0,
-                    }}
+                    className='absolute left-4 top-1/2 -translate-y-1/2 z-10'
+                    style={{ pointerEvents: effectiveControlsVisible ? 'auto' : 'none' }}
+                    animate={{ opacity: effectiveControlsVisible ? 1 : 0, x: effectiveControlsVisible ? 0 : -20 }}
                     transition={{ duration: 0.4, ease: 'easeInOut' }}
                 >
-                    <Thumbnails index={index} setIndex={setIndex} controlsVisible={effectiveControlsVisible} />
+                    <button
+                        disabled={index === 0}
+                        onClick={() => setIndex((i) => Math.max(0, i - 1))}
+                        className={`text-black w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform
+                  ${index === 0
+                                ? 'opacity-40 cursor-not-allowed'
+                                : 'bg-white hover:scale-110 hover:opacity-100 opacity-70'
+                            }`}
+                    >
+                        <svg
+                            className='w-6 h-6'
+                            fill='none'
+                            stroke='currentColor'
+                            viewBox='0 0 24 24'
+                        >
+                            <path
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                strokeWidth={2}
+                                d='M15 19l-7-7 7-7'
+                            />
+                        </svg>
+                    </button>
                 </motion.div>
+
+                {/* Next Button */}
+                <motion.div
+                    className='absolute right-4 top-1/2 -translate-y-1/2 z-10'
+                    style={{ pointerEvents: effectiveControlsVisible ? 'auto' : 'none' }}
+                    animate={{ opacity: effectiveControlsVisible ? 1 : 0, x: effectiveControlsVisible ? 0 : 20 }}
+                    transition={{ duration: 0.4, ease: 'easeInOut' }}
+                >
+                    <button
+                        disabled={index === items.length - 1}
+                        onClick={() => setIndex((i) => Math.min(items.length - 1, i + 1))}
+                        className={`text-black w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform
+                  ${index === items.length - 1
+                                ? 'opacity-40 cursor-not-allowed'
+                                : 'bg-white hover:scale-110 hover:opacity-100 opacity-70'
+                            }`}
+                    >
+                        <svg
+                            className='w-6 h-6'
+                            fill='none'
+                            stroke='currentColor'
+                            viewBox='0 0 24 24'
+                        >
+                            <path
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                strokeWidth={2}
+                                d='M9 5l7 7-7 7'
+                            />
+                        </svg>
+                    </button>
+                </motion.div>
+
+                {/* Image Counter */}
+                <motion.div
+                    className='absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm'
+                    style={{ pointerEvents: effectiveControlsVisible ? 'auto' : 'none' }}
+                    animate={{ opacity: effectiveControlsVisible ? 1 : 0, y: effectiveControlsVisible ? 0 : 20 }}
+                    transition={{ duration: 0.4, ease: 'easeInOut' }}
+                >
+                    {index + 1} / {items.length}
+                </motion.div>
+            </div>
+
+            {/* Thumbnails */}
+            <div className='absolute inset-x-0 bottom-0 z-20'>
+                <Thumbnails index={index} setIndex={setIndex} controlsVisible={effectiveControlsVisible} />
             </div>
 
             {/* Fullscreen Toggle */}
