@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { motion, MotionValue, useMotionValue, useSpring, useTransform } from "framer-motion"
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -9,8 +9,20 @@ import MobileSidebar from '@/components/mobile-sidebar'
 
 export default function FloatingDockDashboard() {
     const mouseX = useMotionValue(Infinity);
+    const [isFullscreen, setIsFullscreen] = useState(false);
+
+    useEffect(() => {
+        const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    }, []);
+
     return <>
-        <nav className='h-15 hidden md:flex items-center justify-center w-screen fixed top-4 z-50'>
+        <motion.nav
+            className='h-15 hidden md:flex items-center justify-center w-screen fixed top-4 z-50'
+            animate={{ y: isFullscreen ? -100 : 0, opacity: isFullscreen ? 0 : 1 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
             <motion.div
                 initial={{ opacity: 0, y: -40, filter: "blur(5px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -28,8 +40,8 @@ export default function FloatingDockDashboard() {
                     })
                 }
             </motion.div>
-        </nav>
-        <MobileSidebar items={NavbarItems} />
+        </motion.nav>
+        <MobileSidebar items={NavbarItems} isFullscreen={isFullscreen} />
     </>
 }
 

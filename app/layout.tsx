@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Montserrat, Geist_Mono } from "next/font/google";
 import FloatingDockDashboard from "@/components/floating-dock";
 import Logo from "@/components/logo";
-import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -32,11 +31,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-          <Logo />
-          <FloatingDockDashboard />
-          {children}
-        </ThemeProvider>
+        <Logo />
+        <FloatingDockDashboard />
+        {children}
       </body>
     </html>
   );

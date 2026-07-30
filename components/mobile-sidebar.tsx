@@ -14,9 +14,11 @@ export interface MobileSidebarItem {
 export default function MobileSidebar({
     items,
     className,
+    isFullscreen = false,
 }: {
     items: MobileSidebarItem[]
     className?: string
+    isFullscreen?: boolean
 }) {
     const [isOpen, setIsOpen] = useState(false)
     const pathname = usePathname()
@@ -42,8 +44,16 @@ export default function MobileSidebar({
                 aria-expanded={isOpen}
                 onClick={() => setIsOpen((prev) => !prev)}
                 initial={{ opacity: 0, y: -40, filter: 'blur(5px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                transition={{ delay: 0.3, duration: 0.2, ease: 'easeInOut' }}
+                animate={{
+                    opacity: isFullscreen ? 0 : 1,
+                    y: isFullscreen ? -100 : 0,
+                    filter: 'blur(0px)',
+                }}
+                transition={
+                    isFullscreen
+                        ? { duration: 0.3, ease: 'easeInOut' }
+                        : { delay: 0.3, duration: 0.2, ease: 'easeInOut' }
+                }
                 className='fixed right-6 top-4 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/70 backdrop-blur-xl shadow-[0_8px_30px_-8px_rgba(61,7,69,0.35)] dark:border-white/10 dark:bg-black/25'
             >
                 <span className='relative flex h-4 w-5 flex-col items-center justify-center'>
