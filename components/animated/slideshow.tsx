@@ -377,7 +377,7 @@ export default function SlideShow() {
 
             {/* Fullscreen Toggle */}
             <motion.div
-                className='fixed right-4 bottom-4 z-40 md:hidden'
+                className='fixed right-4 bottom-4 z-40 hidden md:block'
                 style={{ pointerEvents: effectiveControlsVisible ? 'auto' : 'none' }}
                 animate={{ opacity: effectiveControlsVisible ? 1 : 0, y: effectiveControlsVisible ? 0 : 20 }}
                 transition={{ duration: 0.4, ease: 'easeInOut' }}
