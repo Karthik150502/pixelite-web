@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 export default function Logo() {
     const [inTopSection, setInTopSection] = useState(true);
     const [ready, setReady] = useState(false);
+    const [isFullscreen, setIsFullscreen] = useState(false);
 
     useEffect(() => {
         const heroSection = document.getElementById("hero-section");
@@ -21,11 +22,17 @@ export default function Logo() {
         return () => observer.disconnect();
     }, []);
 
+    useEffect(() => {
+        const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
+        document.addEventListener("fullscreenchange", handleFullscreenChange);
+        return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    }, []);
+
     return (
         <motion.div
             initial={{ opacity: 0, y: -40, filter: "blur(5px)" }}
             animate={
-                ready && !inTopSection
+                isFullscreen || (ready && !inTopSection)
                     ? { opacity: 0, y: -80, filter: "blur(0px)" }
                     : { opacity: 1, y: 0, filter: "blur(0px)" }
             }

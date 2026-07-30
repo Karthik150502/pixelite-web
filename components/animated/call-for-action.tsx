@@ -130,7 +130,7 @@ export function LetsWorkTogether() {
 
                     {/* Subtle subtext */}
                     <span
-                        className="text-xs tracking-widest uppercase text-muted-foreground/50 transition-all duration-500"
+                        className="text-sm font-light tracking-widest uppercase text-muted-foreground/50 transition-all duration-500"
                         style={{
                             transform: showSuccess ? "translateY(0)" : "translateY(10px)",
                             opacity: showSuccess ? 1 : 0,
@@ -252,7 +252,7 @@ export function LetsWorkTogether() {
                         pointerEvents: isClicked ? "none" : "auto",
                     }}
                 >
-                    <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
+                    <p className="max-w-md text-sm font-light text-muted-foreground">
                         Have an idea in mind? we&apos;d love to hear about it. Let&apos;s capture something exceptional together.
                     </p>
                     {/* <span className="text-xs tracking-widest uppercase text-muted-foreground/60">contact@pixelite.in</span> */}
