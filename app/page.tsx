@@ -1,4 +1,5 @@
 import Demo from "@/components/animated/demo";
+import DemoMarquee from "@/components/animated/demo-marquee";
 import DemoTestimonials from "@/components/animated/demo-testimonials";
 import { WebGLShader } from "@/components/animated/webgl-shader";
 
@@ -62,6 +63,9 @@ export default function Home() {
         </section>
         <section className="relative isolate flex w-full flex-col items-center justify-center">
           <Demo />
+        </section>
+        <section className="relative isolate flex w-full flex-col items-center justify-center">
+          <DemoMarquee />
         </section>
         <section className="relative isolate flex w-full flex-col items-center justify-center">
           <DemoTestimonials />
