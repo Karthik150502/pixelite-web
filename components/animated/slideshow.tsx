@@ -168,6 +168,7 @@ export default function SlideShow() {
     const [isDragging, setIsDragging] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [controlsVisible, setControlsVisible] = useState(true);
+    const [counterHovered, setCounterHovered] = useState(false);
     const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
     const [naturalSizes, setNaturalSizes] = useState<Record<number, { width: number, height: number }>>({});
     const containerRef = useRef<HTMLDivElement>(null);
@@ -430,9 +431,14 @@ export default function SlideShow() {
 
                 {/* Image Counter */}
                 <motion.div
-                    className='absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm'
+                    className='absolute bottom-4 left-1/2 -translate-x-1/2 z-50 bg-black/50 text-white px-3 py-1 rounded-full text-sm'
                     style={{ pointerEvents: effectiveControlsVisible ? 'auto' : 'none' }}
-                    animate={{ opacity: effectiveControlsVisible ? 1 : 0, y: effectiveControlsVisible ? 0 : 20 }}
+                    onMouseEnter={() => setCounterHovered(true)}
+                    onMouseLeave={() => setCounterHovered(false)}
+                    animate={{
+                        opacity: effectiveControlsVisible ? (counterHovered ? 1 : 0.5) : 0,
+                        y: effectiveControlsVisible ? 0 : 20,
+                    }}
                     transition={{ duration: 0.4, ease: 'easeInOut' }}
                 >
                     {index + 1} / {items.length}
