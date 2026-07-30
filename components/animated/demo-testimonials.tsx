@@ -68,8 +68,7 @@ const thirdColumn = testimonials.slice(6, 9);
 
 const Testimonials = () => {
     return (
-        <section className="bg-background my-20 relative">
-
+        <section className="my-20 relative">
             <div className="container z-10 mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -78,7 +77,6 @@ const Testimonials = () => {
                     viewport={{ once: true }}
                     className="flex flex-col items-center justify-center max-w-135 mx-auto"
                 >
-
                     <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tighter mt-5">
                         What people say about us
                     </h2>
