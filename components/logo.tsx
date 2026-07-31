@@ -14,7 +14,10 @@ export default function Logo() {
     const [isFullscreen, setIsFullscreen] = useState(false);
 
     useEffect(() => {
-        if (!isHomePage) return;
+        if (!isHomePage) {
+            setInTopSection(true);
+            return;
+        }
 
         const heroSection = document.getElementById("hero-section");
         if (!heroSection) return;
