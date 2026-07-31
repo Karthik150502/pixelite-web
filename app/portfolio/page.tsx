@@ -1,4 +1,4 @@
-import { LetsWorkTogether } from "@/components/animated/call-for-action";
+import CTAWithVerticalMarquee from "@/components/animated/call-of-action2";
 import AuroraHeroDemo from "@/components/animated/hero-2-demo";
 import Slideshow from "@/components/animated/slideshow";
 
@@ -13,12 +13,7 @@ export default function Home() {
                     <Slideshow />
                 </section>
                 <section className="relative flex w-full flex-col items-center justify-center">
-                    <LetsWorkTogether
-                        headTitle={"Available for Shoots"}
-                        title={"Liked our"}
-                        title2={"Work?"}
-                        subTitle={"Let us win you over by capturing the frames that hold you."}
-                    />
+                    <CTAWithVerticalMarquee />
                 </section>
             </main>
 
