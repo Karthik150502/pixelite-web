@@ -18,7 +18,7 @@ export default function AuroraHeroDemo() {
                     }}
                     className="bg-linear-to-b from-foreground to-muted-foreground bg-clip-text text-center text-4xl font-bold tracking-tight text-transparent md:text-6xl"
                 >
-                    Feel the Pixels
+                    Be Present in the Moment
                 </motion.h1>
                 <motion.p
                     initial={{ opacity: 0, y: 40 }}
