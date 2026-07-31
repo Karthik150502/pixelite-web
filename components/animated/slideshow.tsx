@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, animate } from 'framer-motion';
 import Image from 'next/image';
-import { Maximize2, Minimize2 } from 'lucide-react';
+import { Maximize, Minimize, Pause, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const items = [
     {
@@ -167,12 +167,16 @@ export default function SlideShow() {
     const [index, setIndex] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
     const [controlsVisible, setControlsVisible] = useState(true);
     const [counterHovered, setCounterHovered] = useState(false);
     const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
     const [naturalSizes, setNaturalSizes] = useState<Record<number, { width: number, height: number }>>({});
     const containerRef = useRef<HTMLDivElement>(null);
+    const rootRef = useRef<HTMLDivElement>(null);
     const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const [inView, setInView] = useState(false);
 
     const x = useMotionValue(0);
 
@@ -180,6 +184,20 @@ export default function SlideShow() {
         const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    }, []);
+
+    // Only show the play/pause + fullscreen controls while the slideshow
+    // section is actually in view.
+    useEffect(() => {
+        const el = rootRef.current;
+        if (!el) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => setInView(entry.isIntersecting),
+            { threshold: 0.5 }
+        );
+        observer.observe(el);
+        return () => observer.disconnect();
     }, []);
 
     // Track the carousel's box so we can work out exactly where each
@@ -215,6 +233,11 @@ export default function SlideShow() {
 
     // Controls are only ever auto-hidden while in fullscreen; outside of it they're always shown.
     const effectiveControlsVisible = isFullscreen ? controlsVisible : true;
+
+    // The play/pause + fullscreen buttons are fixed to the viewport, so gate
+    // them on the section actually being in view (fullscreen always counts,
+    // since the section fills the viewport at that point).
+    const playbackControlsVisible = effectiveControlsVisible && (inView || isFullscreen);
 
     useEffect(() => {
         if (!isFullscreen) {
@@ -253,11 +276,23 @@ export default function SlideShow() {
         };
     }, [isFullscreen]);
 
+    // Auto-advance the slideshow every 8s while playing; pauses itself while the
+    // user is mid-drag so it doesn't fight a manual swipe.
+    useEffect(() => {
+        if (!isPlaying || isDragging) return;
+
+        const intervalId = setInterval(() => {
+            setIndex((i) => (i + 1) % items.length);
+        }, 8000);
+
+        return () => clearInterval(intervalId);
+    }, [isPlaying, isDragging]);
+
     const toggleFullscreen = () => {
         if (document.fullscreenElement) {
             document.exitFullscreen();
         } else {
-            document.documentElement.requestFullscreen();
+            rootRef.current?.requestFullscreen();
         }
     };
 
@@ -275,7 +310,7 @@ export default function SlideShow() {
     }, [index, x, isDragging]);
 
     return (
-        <div className='relative w-full h-screen'>
+        <div className='relative w-full h-screen' ref={rootRef}>
             {/* Main Carousel */}
             <div className='absolute inset-0 overflow-hidden bg-black' ref={containerRef}>
                 <motion.div
@@ -341,7 +376,7 @@ export default function SlideShow() {
                                 />
                                 {imageRect && (
                                     <motion.div
-                                        className='absolute pt-16 pb-6 px-6 text-right'
+                                        className='absolute pt-16 pb-8 px-6 text-right'
                                         style={{
                                             left: imageRect.left,
                                             width: imageRect.width,
@@ -374,26 +409,19 @@ export default function SlideShow() {
                 >
                     <button
                         disabled={index === 0}
-                        onClick={() => setIndex((i) => Math.max(0, i - 1))}
-                        className={`text-black w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform
+                        onClick={() => {
+                            if (isPlaying) {
+                                setIsPlaying(false)
+                            }
+                            setIndex((i) => Math.max(0, i - 1))
+                        }}
+                        className={`text-black w-8 h-8 rounded-full flex items-center justify-center shadow-lg transition-transform
                   ${index === 0
                                 ? 'opacity-40 cursor-not-allowed'
                                 : 'bg-white hover:scale-110 hover:opacity-100 opacity-70'
                             }`}
                     >
-                        <svg
-                            className='w-6 h-6'
-                            fill='none'
-                            stroke='currentColor'
-                            viewBox='0 0 24 24'
-                        >
-                            <path
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                strokeWidth={2}
-                                d='M15 19l-7-7 7-7'
-                            />
-                        </svg>
+                        <ChevronLeft size={15} />
                     </button>
                 </motion.div>
 
@@ -406,32 +434,25 @@ export default function SlideShow() {
                 >
                     <button
                         disabled={index === items.length - 1}
-                        onClick={() => setIndex((i) => Math.min(items.length - 1, i + 1))}
-                        className={`text-black w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform
+                        onClick={() => {
+                            if (isPlaying) {
+                                setIsPlaying(false)
+                            }
+                            setIndex((i) => Math.min(items.length - 1, i + 1))
+                        }}
+                        className={`text-black w-8 h-8 rounded-full flex items-center justify-center shadow-lg transition-transform
                   ${index === items.length - 1
                                 ? 'opacity-40 cursor-not-allowed'
                                 : 'bg-white hover:scale-110 hover:opacity-100 opacity-70'
                             }`}
                     >
-                        <svg
-                            className='w-6 h-6'
-                            fill='none'
-                            stroke='currentColor'
-                            viewBox='0 0 24 24'
-                        >
-                            <path
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                strokeWidth={2}
-                                d='M9 5l7 7-7 7'
-                            />
-                        </svg>
+                        <ChevronRight size={15} />
                     </button>
                 </motion.div>
 
                 {/* Image Counter */}
                 <motion.div
-                    className='absolute bottom-4 left-1/2 -translate-x-1/2 z-50 bg-black/50 text-white px-3 py-1 rounded-full text-sm'
+                    className='absolute bottom-4 left-1/2 -translate-x-1/2 z-50 bg-black/50 text-white px-3 py-1 rounded-full text-xs'
                     style={{ pointerEvents: effectiveControlsVisible ? 'auto' : 'none' }}
                     onMouseEnter={() => setCounterHovered(true)}
                     onMouseLeave={() => setCounterHovered(false)}
@@ -450,22 +471,33 @@ export default function SlideShow() {
                 <Thumbnails index={index} setIndex={setIndex} controlsVisible={effectiveControlsVisible} />
             </div>
 
-            {/* Fullscreen Toggle */}
+            {/* Play/Pause + Fullscreen Toggle */}
             <motion.div
-                className='fixed right-4 bottom-4 z-40 hidden md:block'
-                style={{ pointerEvents: effectiveControlsVisible ? 'auto' : 'none' }}
-                animate={{ opacity: effectiveControlsVisible ? 1 : 0, y: effectiveControlsVisible ? 0 : 20 }}
+                className='fixed right-4 bottom-4 z-40 flex items-center gap-2'
+                style={{ pointerEvents: playbackControlsVisible ? 'auto' : 'none' }}
+                animate={{ opacity: playbackControlsVisible ? 1 : 0, y: playbackControlsVisible ? 0 : 20 }}
                 transition={{ duration: 0.4, ease: 'easeInOut' }}
             >
                 <button
+                    onClick={() => setIsPlaying((p) => !p)}
+                    aria-label={isPlaying ? 'Pause slideshow' : 'Play slideshow'}
+                    className='text-black w-8 h-8 rounded-full flex items-center justify-center shadow-lg transition-transform bg-white hover:scale-110 hover:opacity-100 opacity-50'
+                >
+                    {isPlaying ? (
+                        <Pause fill="black" size={15} />
+                    ) : (
+                        <Play fill="black" size={15} />
+                    )}
+                </button>
+                <button
                     onClick={toggleFullscreen}
                     aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
-                    className='text-black w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-transform bg-white hover:scale-110 hover:opacity-100 opacity-50'
+                    className='hidden md:flex text-black w-8 h-8 rounded-full items-center justify-center shadow-lg transition-transform bg-white hover:scale-110 hover:opacity-100 opacity-50'
                 >
                     {isFullscreen ? (
-                        <Minimize2 className='w-5 h-5' />
+                        <Minimize size={15} />
                     ) : (
-                        <Maximize2 className='w-5 h-5' />
+                        <Maximize size={15} />
                     )}
                 </button>
             </motion.div>

@@ -33,7 +33,7 @@ export default function FloatingDockDashboard() {
                 }}
                 onMouseMove={(e) => mouseX.set(e.pageX)}
                 onMouseLeave={() => mouseX.set(Infinity)}
-                className='h-full w-fit flex items-center justify-center p-4 rounded-full border border-white/30 bg-white/70 dark:border-white/10 dark:bg-black/25 backdrop-blur-xl gap-10 shadow-[0_8px_30px_-8px_rgba(61,7,69,0.35)] px-10'>
+                className='h-full w-fit flex items-center justify-center p-4 rounded-full border border-white/30 bg-white/70 dark:border-white/10 dark:bg-black/20 backdrop-blur-xl gap-10 shadow-[0_8px_30px_-8px_rgba(61,7,69,0.35)] px-10'>
                 {
                     NavbarItems.map((item) => {
                         return <LinkContainer mouseX={mouseX} key={item.id} item={item} />
@@ -87,7 +87,7 @@ function LinkContainer({
                 width,
                 height,
             }}
-            className={cn("p-2 flex items-center justify-center relative text-xs font-normal opacity-70 hover:opacity-100 transition-opacity duration-300", isActive ? "text-accent opacity-100 font-semibold" : "")}>
+            className={cn("p-2 flex items-center justify-center relative text-xs font-normal opacity-70 hover:opacity-100 transition-opacity duration-300", isActive ? "text-white opacity-100" : "")}>
             {item.label}
         </motion.div>
     </Link>

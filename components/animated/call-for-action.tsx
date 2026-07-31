@@ -5,7 +5,14 @@ import type React from "react"
 import { useState } from "react"
 import { ArrowUpRight, Calendar } from "lucide-react"
 
-export function LetsWorkTogether() {
+interface ContactUsProps {
+    headTitle?: string;
+    title: string;
+    title2?: string;
+    subTitle?: string;
+}
+
+export function LetsWorkTogether({ headTitle, title, title2, subTitle }: ContactUsProps) {
     const [isHovered, setIsHovered] = useState(false)
     const [isClicked, setIsClicked] = useState(false)
     const [showSuccess, setShowSuccess] = useState(false)
@@ -149,13 +156,18 @@ export function LetsWorkTogether() {
                         pointerEvents: isClicked ? "none" : "auto",
                     }}
                 >
-                    <span className="relative flex size-2">
-                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                        <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
-                    </span>
-                    <span className="text-sm font-medium tracking-widest uppercase text-muted-foreground">
-                        Available for shoots
-                    </span>
+                    {
+                        headTitle && <>
+                            <span className="relative flex size-2">
+                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                                <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
+                            </span>
+                            <span className="text-sm font-medium tracking-widest uppercase text-muted-foreground">
+                                {headTitle}
+                            </span>
+                        </>
+                    }
+
                 </div>
 
                 <div
@@ -182,7 +194,7 @@ export function LetsWorkTogether() {
                                         transform: isHovered && !isClicked ? "translateY(-8%)" : "translateY(0)",
                                     }}
                                 >
-                                    Let&apos;s collaborate
+                                    {title}
                                 </span>
                             </span>
                             <span className="block overflow-hidden">
@@ -192,7 +204,7 @@ export function LetsWorkTogether() {
                                         transform: isHovered && !isClicked ? "translateY(-8%)" : "translateY(0)",
                                     }}
                                 >
-                                    <span className="text-muted-foreground/60">together</span>
+                                    <span className="text-muted-foreground/60">{title2}</span>
                                 </span>
                             </span>
                         </h2>
@@ -253,7 +265,7 @@ export function LetsWorkTogether() {
                     }}
                 >
                     <p className="max-w-md text-sm font-light text-muted-foreground">
-                        Have an idea in mind? we&apos;d love to hear about it. Let&apos;s capture something exceptional together.
+                        {subTitle}
                     </p>
                     {/* <span className="text-xs tracking-widest uppercase text-muted-foreground/60">contact@pixelite.in</span> */}
                 </div>

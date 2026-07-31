@@ -72,7 +72,12 @@ export default function Home() {
           <DemoTestimonials />
         </section>
         <section className="relative isolate flex w-full flex-col items-center justify-center">
-          <LetsWorkTogether />
+          <LetsWorkTogether
+            headTitle={"Available for Shoots"}
+            title={"Let's collaborate"}
+            title2={"together"}
+            subTitle={"Have an idea in mind? we'd love to hear about it. Let&apos;s capture something exceptional together."}
+          />
         </section>
 
       </main>

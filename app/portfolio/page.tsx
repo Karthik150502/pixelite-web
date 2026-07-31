@@ -1,14 +1,25 @@
+import { LetsWorkTogether } from "@/components/animated/call-for-action";
+import AuroraHeroDemo from "@/components/animated/hero-2-demo";
 import Slideshow from "@/components/animated/slideshow";
 
 export default function Home() {
     return (
         <div className="flex flex-1 flex-col font-sans bg-white dark:bg-black">
             <main className="flex-1 isolate">
-
-                <section id="hero-section" className="relative isolate flex h-screen w-full flex-col items-center justify-center overflow-hidden">
+                <section id="hero-section" className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden px-6 sm:px-0">
+                    <AuroraHeroDemo />
+                </section>
+                <section id="slideshow-section" className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden">
                     <Slideshow />
                 </section>
-
+                <section className="relative flex w-full flex-col items-center justify-center">
+                    <LetsWorkTogether
+                        headTitle={"Available for Shoots"}
+                        title={"Liked our"}
+                        title2={"Work?"}
+                        subTitle={"Let us win you over by capturing the frames that hold you."}
+                    />
+                </section>
             </main>
 
             <footer className="border-t border-zinc-200 dark:border-zinc-800">
