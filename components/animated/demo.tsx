@@ -36,9 +36,9 @@ const sampleMediaContent: MediaContentCollection = {
         about: {
             title: "Julia and Jacob's Journey",
             overview:
-                'Jacob and Julia recently began a beautiful new chapter of their lives as husband and wife. Their marriage is a celebration of love, trust, and the promise of a shared future. Together, they inspire those around them with their kindness, laughter, and unwavering support for one another. As they embark on this exciting journey, may every day bring them happiness, strength, and cherished memories.',
+                "Every wedding tells a story, and Jacob and Julia's was one of quiet elegance and genuine joy. From the nervous excitement of getting ready to the first shared glance at the altar, we were there to capture every fleeting, unscripted moment. Our lens followed the soft morning light, the warmth between family and friends, and the little details that made this day uniquely theirs. It was an honor to document not just a wedding, but the beginning of a lifelong love story.",
             conclusion:
-                'May their home always be filled with love, peace, and endless joy. Wishing Jacob and Julia a lifetime of togetherness, adventure, and countless blessings as they build a wonderful life side by side.',
+                "Through candid frames and timeless portraits, we hope to have preserved the emotion, laughter, and love that filled every corner of Jacob and Julia's celebration. May these photographs be a window back into this beautiful day, for them to revisit again and again in the years ahead.",
         },
     },
     image: {
