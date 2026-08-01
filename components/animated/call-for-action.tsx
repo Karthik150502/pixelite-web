@@ -4,6 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { ArrowUpRight, Calendar } from "lucide-react"
+import { cal_dot_com_url } from "@/lib/constants/metadata";
 
 interface ContactUsProps {
     headTitle?: string;
@@ -28,7 +29,7 @@ export function LetsWorkTogether({ headTitle, title, title2, subTitle }: Contact
     }
 
     const handleBookCall = () => {
-        window.open("https://cal.com/karthikj_150502/15min", "_blank")
+        window.open(cal_dot_com_url, "_blank")
     }
 
     return (

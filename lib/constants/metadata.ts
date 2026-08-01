@@ -6,3 +6,23 @@ export const NavbarItems = [
   { id: 6, href: "/about", label: "about" },
 ];
 
+export const cal_dot_com_url = "https://cal.com/karthikj_150502/15min"
+
+
+export const socials = {
+  "Karthik J": [
+    {
+      name: "Instagram",
+      icon: "/assets/socials/instagram.svg",
+      href: "https://www.instagram.com/karthik.00155"
+    }, {
+      name: "Twitter/ X",
+      icon: "/assets/socials/twitter.svg",
+      href: "https://x.com/Karthik72050421"
+    }, {
+      name: "Linked In",
+      icon: "/assets/socials/linkedin.svg",
+      href: "https://www.linkedin.com/in/karthik150502/"
+    }
+  ]
+}

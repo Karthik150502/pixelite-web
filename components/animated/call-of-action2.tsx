@@ -1,5 +1,6 @@
 "use client";
 
+import { cal_dot_com_url } from "@/lib/constants/metadata";
 import { cn } from "@/lib/utils";
 import { ReactNode, useEffect, useRef } from "react";
 
@@ -147,7 +148,7 @@ export default function CTAWithVerticalMarquee() {
                             </button>
                             <button className="group relative px-6 py-3 bg-secondary text-secondary-foreground rounded-md font-medium overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg border border-border"
                                 onClick={() => {
-                                    window.open("https://cal.com/karthikj_150502/15min", "_blank")
+                                    window.open(cal_dot_com_url, "_blank")
                                 }}
                             >
                                 <span className="relative z-10">Book a 15 minute call</span>
