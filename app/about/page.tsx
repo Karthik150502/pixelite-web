@@ -1,11 +1,27 @@
-import MinimalistHeroDemo from "@/components/animated/about-hero-demo";
+import { MinimalistHero } from "@/components/animated/about-hero";
+import { cal_dot_com_url, socials } from "@/lib/constants/metadata";
 
 export default function Home() {
     return (
         <div className="flex flex-1 flex-col font-sans bg-white dark:bg-black">
             <main className="flex-1 isolate">
                 <section id="hero-section" className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden px-6 sm:px-0">
-                    <MinimalistHeroDemo />
+                    <MinimalistHero
+                        mainText="Pixelite Studio is an idea of two creative minds in the world of photography who never settle for nothing less than extraordinary"
+                        imageSrc="https://dl.dropboxusercontent.com/scl/fi/udqk30goqo2mun8oy05wr/IMG_4855.PNG?rlkey=xwk7bsk19f18z8n003ncay399&st=xwcu44az&dl=0"
+                        imageAlt="A portrait of a person in a brown shirt, in profile."
+                        overlayText={{
+                            part1: 'I am',
+                            part2: 'Karthik',
+                        }}
+                        contact={{
+                            contactButtonText: "talk to me",
+                            contactUrl: cal_dot_com_url
+                        }}
+                        socialLinks={socials['Karthik J']}
+                        locationText="Bangalore, Karnataka, India"
+                        imageBackgroundClassName="bg-green-600"
+                    />
                 </section>
 
             </main>

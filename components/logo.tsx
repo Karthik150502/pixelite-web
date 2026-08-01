@@ -14,10 +14,7 @@ export default function Logo() {
     const [isFullscreen, setIsFullscreen] = useState(false);
 
     useEffect(() => {
-        if (!isHomePage) {
-            setInTopSection(true);
-            return;
-        }
+        if (!isHomePage) return;
 
         const heroSection = document.getElementById("hero-section");
         if (!heroSection) return;
@@ -31,6 +28,8 @@ export default function Logo() {
         return () => observer.disconnect();
     }, [isHomePage]);
 
+    const isInTopSection = isHomePage ? inTopSection : true;
+
     useEffect(() => {
         const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
         document.addEventListener("fullscreenchange", handleFullscreenChange);
@@ -41,7 +40,7 @@ export default function Logo() {
         <motion.div
             initial={{ opacity: 0, y: -40, filter: "blur(5px)" }}
             animate={
-                isFullscreen || (ready && !inTopSection)
+                isFullscreen || (ready && !isInTopSection)
                     ? { opacity: 0, y: -80, filter: "blur(0px)" }
                     : { opacity: 1, y: 0, filter: "blur(0px)" }
             }
