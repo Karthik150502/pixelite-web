@@ -26,3 +26,23 @@ export const socials = {
     }
   ]
 }
+
+export const aboutContacts = {
+  "Karthik J": {
+    mainText:
+      "Pixelite Studio is an idea of two creative minds in the world of photography who never settle for nothing less than extraordinary",
+    imageSrc: "/assets/about/karthik-portrait.png",
+    imageAlt: "A portrait of a person in a brown shirt, in profile.",
+    overlayText: {
+      part1: "I am",
+      part2: "Karthik",
+    },
+    contact: {
+      contactButtonText: "talk to me",
+      contactUrl: cal_dot_com_url,
+    },
+    socialLinks: socials["Karthik J"],
+    locationText: "Bangalore, Karnataka, India",
+    imageBackgroundClassName: "bg-green-600",
+  }
+}

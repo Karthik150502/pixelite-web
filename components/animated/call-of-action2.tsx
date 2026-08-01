@@ -111,12 +111,14 @@ export default function CTAWithVerticalMarquee() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-background text-foreground flex items-center justify-center px-6 py-12 overflow-hidden">
+        <div className="min-h-screen text-foreground flex items-center justify-center px-6 py-12 overflow-hidden">
             <div className="w-full max-w-7xl animate-fade-in-up">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
                     {/* Left Marquee */}
                     <div ref={marqueeRef} className="relative h-150 lg:h-175 flex items-center justify-center animate-fade-in-up [animation-delay:400ms]">
-                        <div className="relative w-full h-full">
+                        <div
+                            className="relative w-full h-full [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)] [-webkit-mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)]"
+                        >
                             <VerticalMarquee speed={10} className="h-full">
                                 {marqueeItems.map((item, idx) => (
                                     <div
@@ -127,12 +129,6 @@ export default function CTAWithVerticalMarquee() {
                                     </div>
                                 ))}
                             </VerticalMarquee>
-
-                            {/* Top vignette */}
-                            <div className="pointer-events-none absolute top-0 left-0 right-0 h-64 bg-linear-to-b from-background via-background/50 to-transparent z-10"></div>
-
-                            {/* Bottom vignette */}
-                            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-64 bg-linear-to-t from-background via-background/50 to-transparent z-10"></div>
                         </div>
                     </div>
 
