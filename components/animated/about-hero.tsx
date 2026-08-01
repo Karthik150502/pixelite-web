@@ -17,7 +17,7 @@ export interface SocialLink {
 interface MinimalistHeroProps {
     logoText?: string;
     mainText: string;
-    readMoreLink: string;
+    readMoreLink?: string;
     imageSrc: string;
     imageAlt: string;
     overlayText: {
@@ -79,9 +79,11 @@ export const MinimalistHero = ({
                     className="z-20 order-2 md:order-1 text-center md:text-left"
                 >
                     <p className="mx-auto max-w-xs text-sm leading-relaxed text-foreground/80 md:mx-0">{mainText}</p>
-                    <a href={readMoreLink} className="mt-4 inline-block text-sm font-medium text-foreground underline decoration-from-font">
-                        Read More
-                    </a>
+                    {
+                        readMoreLink && <a href={readMoreLink} className="mt-4 inline-block text-sm font-medium text-foreground underline decoration-from-font">
+                            Read More
+                        </a>
+                    }
                 </motion.div>
 
                 {/* Center Image with Circle */}
