@@ -54,7 +54,7 @@ export default function MobileSidebar({
                         ? { duration: 0.3, ease: 'easeInOut' }
                         : { delay: 0.3, duration: 0.2, ease: 'easeInOut' }
                 }
-                className='fixed right-6 top-4 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/70 backdrop-blur-xl shadow-[0_8px_30px_-8px_rgba(61,7,69,0.35)] dark:border-white/10 dark:bg-black/25'
+                className='fixed right-6 top-4 z-50 flex h-11 w-11 items-center justify-center rounded-full border backdrop-blur-xl shadow-[0_8px_30px_-8px_rgba(61,7,69,0.35)] border-white/10 bg-black/25'
             >
                 <span className='relative flex h-4 w-5 flex-col items-center justify-center'>
                     <motion.span
@@ -89,7 +89,7 @@ export default function MobileSidebar({
                         />
                         <motion.aside
                             key='sidebar'
-                            className='fixed inset-y-0 right-0 z-50 flex h-full w-64 max-w-[80vw] flex-col gap-2 border-l border-white/30 bg-white/90 px-8 py-24 backdrop-blur-xl dark:border-white/10 dark:bg-black/80'
+                            className='fixed inset-y-0 right-0 z-50 flex h-full w-64 max-w-[80vw] flex-col gap-2 border-l px-8 py-16 bg-black/40 backdrop-blur-3xl  border-white/10'
                             initial={{ x: '100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
@@ -102,7 +102,7 @@ export default function MobileSidebar({
                                         key={item.id}
                                         href={item.href}
                                         className={cn(
-                                            'py-2 text-lg capitalize tracking-tight opacity-70 transition-opacity duration-300 hover:opacity-100',
+                                            'py-2 text-sm capitalize tracking-tight opacity-70 transition-opacity duration-300 hover:opacity-100',
                                             isActive ? 'text-accent font-semibold opacity-100' : ''
                                         )}
                                     >
