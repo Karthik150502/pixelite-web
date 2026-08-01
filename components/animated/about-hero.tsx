@@ -109,19 +109,21 @@ export const MinimalistHero = ({
                         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
                         className="absolute z-0 h-75 w-75 rounded-full bg-accent md:h-100 md:w-100 lg:h-125 lg:w-125"
                     ></motion.div>
-                    <motion.img
-                        src={imageSrc}
-                        alt={imageAlt}
-                        className="relative z-10 h-auto w-72 object-cover drop-shadow-[0_10px_25px_rgba(0,0,0,0.35)] md:w-80 scale-150 lg:w-74"
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-                        onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.onerror = null;
-                            target.src = `https://placehold.co/400x600/eab308/ffffff?text=Image+Not+Found`;
-                        }}
-                    />
+                    {
+                        imageSrc && <motion.img
+                            src={imageSrc}
+                            alt={imageAlt}
+                            className="relative z-10 h-auto w-72 object-cover drop-shadow-[0_10px_25px_rgba(0,0,0,0.35)] md:w-80 scale-150 lg:w-74"
+                            initial={{ opacity: 0, y: 50 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+                            onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.onerror = null;
+                                target.src = `https://placehold.co/400x600/eab308/ffffff?text=Image+Not+Found`;
+                            }}
+                        />
+                    }
                 </div>
 
                 {/* Right Text */}
