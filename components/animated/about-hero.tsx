@@ -33,6 +33,10 @@ interface MinimalistHeroProps {
     }
 }
 
+// next/image forwards its ref to the underlying <img>, so it can be wrapped
+// for animation the same way a plain motion.img would be.
+const MotionImage = motion.create(Image);
+
 // Helper component for social media icons
 const SocialIcon = ({ href, icon, name }: SocialLink) => (
     <a href={href} target="_blank" rel="noopener noreferrer" className="text-foreground/60 transition-colors hover:text-foreground">
@@ -115,9 +119,11 @@ export const MinimalistHero = ({
                         )}
                     ></motion.div>
                     {
-                        imageSrc && <motion.img
+                        imageSrc && <MotionImage
                             src={imageSrc}
                             alt={imageAlt}
+                            width={480}
+                            height={640}
                             className="relative z-10 h-auto w-72 object-cover drop-shadow-[0_10px_25px_rgba(0,0,0,0.35)] md:w-80 scale-150 lg:w-74"
                             initial={{ opacity: 0, y: 50 }}
                             animate={{ opacity: 1, y: 0 }}

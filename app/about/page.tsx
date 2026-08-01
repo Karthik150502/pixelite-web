@@ -8,7 +8,7 @@ export default function Home() {
                 <section id="hero-section" className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden px-6 sm:px-0">
                     <MinimalistHero
                         mainText="Pixelite Studio is an idea of two creative minds in the world of photography who never settle for nothing less than extraordinary"
-                        imageSrc="https://dl.dropboxusercontent.com/scl/fi/udqk30goqo2mun8oy05wr/IMG_4855.PNG?rlkey=xwk7bsk19f18z8n003ncay399&st=xwcu44az&dl=0"
+                        imageSrc="/assets/about/karthik-portrait.png"
                         imageAlt="A portrait of a person in a brown shirt, in profile."
                         overlayText={{
                             part1: 'I am',
