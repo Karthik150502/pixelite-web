@@ -45,9 +45,9 @@ export const AuroraHero = ({ children, className }: AuroraHeroProps) => {
                 {/* The Aurora Background */}
                 <div className="absolute inset-0 z-0">
                     {/* Main Aurora Blob 1 (Primary Color) */}
-                    <div className="absolute -top-1/4 left-1/4 h-96 w-96 animate-[aurora-1_20s_ease-in-out_infinite] rounded-full bg-primary/30 opacity-20 blur-3xl filter dark:opacity-50" />
+                    <div className="absolute -top-1/4 left-1/4 h-96 w-96 animate-[aurora-1_20s_ease-in-out_infinite] rounded-full bg-primary/30 blur-3xl filter opacity-50" />
                     {/* Main Aurora Blob 2 (Secondary/Muted Color) */}
-                    <div className="absolute -bottom-1/4 right-1/4 h-96 w-96 animate-[aurora-2_20s_ease-in-out_infinite] rounded-full bg-muted-foreground/30 opacity-10 blur-3xl filter dark:opacity-30" />
+                    <div className="absolute -bottom-1/4 right-1/4 h-96 w-96 animate-[aurora-2_20s_ease-in-out_infinite] rounded-full bg-muted-foreground/30 blur-3xl filter opacity-30" />
                 </div>
 
                 {/* Content */}

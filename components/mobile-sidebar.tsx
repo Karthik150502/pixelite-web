@@ -58,17 +58,17 @@ export default function MobileSidebar({
             >
                 <span className='relative flex h-4 w-5 flex-col items-center justify-center'>
                     <motion.span
-                        className='absolute h-[1.5px] w-5 rounded-full bg-zinc-950 dark:bg-white'
+                        className='absolute h-[1.5px] w-5 rounded-full bg-white'
                         animate={isOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -5 }}
                         transition={{ duration: 0.2, ease: 'easeInOut' }}
                     />
                     <motion.span
-                        className='absolute h-[1.5px] w-5 rounded-full bg-zinc-950 dark:bg-white'
+                        className='absolute h-[1.5px] w-5 rounded-full bg-white'
                         animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
                         transition={{ duration: 0.15, ease: 'easeInOut' }}
                     />
                     <motion.span
-                        className='absolute h-[1.5px] w-5 rounded-full bg-zinc-950 dark:bg-white'
+                        className='absolute h-[1.5px] w-5 rounded-full bg-white'
                         animate={isOpen ? { rotate: -45, y: 0 } : { rotate: 0, y: 5 }}
                         transition={{ duration: 0.2, ease: 'easeInOut' }}
                     />

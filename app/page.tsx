@@ -47,7 +47,7 @@ export default function Home() {
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,--theme(--color-primary/.2),transparent_60%)]"
           />
-          <div className="mx-auto flex w-fit max-w-6xl flex-col items-center gap-2 rounded-4xl border border-white/30 px-6 py-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl sm:px-10 dark:border-white/10 dark:shadow-[0_8px_32px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(0,0,0,0.2)]">
+          <div className="mx-auto flex w-fit max-w-6xl flex-col items-center gap-2 rounded-4xl border px-6 py-6 text-center  backdrop-blur-xl sm:px-10 border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(0,0,0,0.2)]">
             <h1 className="max-w-2xl text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-6xl sm:leading-tight">
               Stories behind every frame we capture
             </h1>
