@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -27,6 +26,10 @@ interface MinimalistHeroProps {
     socialLinks?: SocialLink[];
     locationText: string;
     className?: string;
+    contact?: {
+        contactUrl: string,
+        contactButtonText: string
+    }
 }
 
 // Helper component for social media icons
@@ -47,6 +50,7 @@ export const MinimalistHero = ({
     socialLinks,
     locationText,
     className,
+    contact
 }: MinimalistHeroProps) => {
     return (
         <div
@@ -76,14 +80,25 @@ export const MinimalistHero = ({
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 1 }}
-                    className="z-20 order-2 md:order-1 text-center md:text-left"
+                    className="z-20 order-2 md:order-1 text-center md:text-left space-y-2"
                 >
-                    <p className="mx-auto max-w-xs text-sm leading-relaxed text-foreground/80 md:mx-0">{mainText}</p>
+                    <p className="mx-auto max-w-xs text-sm leading-relaxed text-foreground/80 drop-shadow-[0_1px_3px_rgba(0,0,0,0.35)] md:mx-0">{mainText}</p>
                     {
                         readMoreLink && <a href={readMoreLink} className="mt-4 inline-block text-sm font-medium text-foreground underline decoration-from-font">
                             Read More
                         </a>
                     }
+                    {
+                        contact && <button className="group relative px-6 py-3 bg-secondary text-secondary-foreground rounded-md font-medium overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg border border-border text-xs"
+                            onClick={() => {
+                                window.open(contact.contactUrl, "_blank")
+                            }}
+                        >
+                            <span className="relative z-10">{contact.contactButtonText}</span>
+                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-foreground/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
+                        </button>
+                    }
+
                 </motion.div>
 
                 {/* Center Image with Circle */}
@@ -97,7 +112,7 @@ export const MinimalistHero = ({
                     <motion.img
                         src={imageSrc}
                         alt={imageAlt}
-                        className="relative z-10 h-auto w-72 object-cover md:w-80 scale-150 lg:w-96"
+                        className="relative z-10 h-auto w-72 object-cover drop-shadow-[0_10px_25px_rgba(0,0,0,0.35)] md:w-80 scale-150 lg:w-74"
                         initial={{ opacity: 0, y: 50 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
@@ -116,7 +131,7 @@ export const MinimalistHero = ({
                     transition={{ duration: 0.6, delay: 1.2 }}
                     className="z-20 order-3 flex items-center justify-center text-center md:justify-start"
                 >
-                    <h1 className="text-7xl font-extrabold text-left text-foreground md:text-8xl lg:text-9xl">
+                    <h1 className="text-7xl font-extrabold text-left text-foreground drop-shadow-[0_2px_4px_rgba(0,0,0,0.35)] md:text-8xl lg:text-8xl">
                         {overlayText.part1}
                         <br />
                         {overlayText.part2}
@@ -143,7 +158,7 @@ export const MinimalistHero = ({
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 1.3 }}
-                    className="text-sm font-medium text-foreground/80"
+                    className="text-sm font-medium text-foreground/80 ml-4"
                 >
                     {locationText}
                 </motion.div>
