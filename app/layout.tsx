@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat, Geist_Mono } from "next/font/google";
+import AmbientBackground from "@/components/ambient-background";
 import FloatingDockDashboard from "@/components/floating-dock";
 import Logo from "@/components/logo";
 import "./globals.css";
@@ -31,6 +32,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
+        <AmbientBackground />
         <Logo />
         <FloatingDockDashboard />
         {children}
