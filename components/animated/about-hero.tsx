@@ -26,6 +26,7 @@ interface MinimalistHeroProps {
     socialLinks?: SocialLink[];
     locationText: string;
     className?: string;
+    imageBackgroundClassName?: string;
     contact?: {
         contactUrl: string,
         contactButtonText: string
@@ -50,6 +51,7 @@ export const MinimalistHero = ({
     socialLinks,
     locationText,
     className,
+    imageBackgroundClassName,
     contact
 }: MinimalistHeroProps) => {
     return (
@@ -82,14 +84,14 @@ export const MinimalistHero = ({
                     transition={{ duration: 0.6, delay: 1 }}
                     className="z-20 order-2 md:order-1 text-center md:text-left space-y-2"
                 >
-                    <p className="mx-auto max-w-xs text-sm leading-relaxed font-semibold text-foreground/80 drop-shadow-[0_1px_3px_rgba(0,0,0,0.35)] md:mx-0">{mainText}</p>
+                    <p className="mx-auto max-w-xs text-sm leading-relaxed font-semibold lg:font-normal text-foreground/80 drop-shadow-[0_1px_3px_rgba(0,0,0,0.35)] md:mx-0">{mainText}</p>
                     {
                         readMoreLink && <a href={readMoreLink} className="mt-4 inline-block text-sm font-medium text-foreground underline decoration-from-font">
                             Read More
                         </a>
                     }
                     {
-                        contact && <button className="group relative px-6 py-3 bg-secondary text-secondary-foreground rounded-md font-semibold overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg border border-border text-xs"
+                        contact && <button className="group relative px-6 py-3 bg-secondary text-secondary-foreground rounded-md font-semibold lg:font-normal overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg border border-border text-xs"
                             onClick={() => {
                                 window.open(contact.contactUrl, "_blank")
                             }}
@@ -107,7 +109,10 @@ export const MinimalistHero = ({
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-                        className="absolute z-0 h-75 w-75 rounded-full bg-accent md:h-100 md:w-100 lg:h-125 lg:w-125"
+                        className={cn(
+                            'absolute z-0 h-75 w-75 rounded-full md:h-100 md:w-100 lg:h-125 lg:w-125',
+                            imageBackgroundClassName
+                        )}
                     ></motion.div>
                     {
                         imageSrc && <motion.img
