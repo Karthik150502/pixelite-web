@@ -33,8 +33,8 @@ export const TestimonialsColumn = (props: {
                     ...new Array(2).fill(0).map((_, index) => (
                         <React.Fragment key={index}>
                             {props.testimonials.map(({ text, image, name, role }, i) => (
-                                <div className="p-10 rounded-3xl border border-white/30 shadow-lg shadow-primary/10 max-w-xs w-full dark:border-white/10 bg-transparent" key={i}>
-                                    <div className="text-zinc-600 dark:text-zinc-400 text-sm font-light">{text}</div>
+                                <div className="p-10 rounded-3xl border shadow-lg shadow-primary/10 max-w-xs w-full border-white/10 bg-transparent" key={i}>
+                                    <div className="text-zinc-400 text-sm font-light">{text}</div>
                                     <div className="flex items-center gap-2 mt-5">
                                         <Image
                                             width={40}
@@ -44,8 +44,8 @@ export const TestimonialsColumn = (props: {
                                             className="h-10 w-10 rounded-full"
                                         />
                                         <div className="flex flex-col">
-                                            <div className="font-medium tracking-tight leading-5 text-zinc-800 dark:text-zinc-200">{name}</div>
-                                            <div className="leading-5 tracking-tight text-zinc-500 dark:text-zinc-500 text-sm font-semibold">{role}</div>
+                                            <div className="font-medium tracking-tight leading-5 text-zinc-200">{name}</div>
+                                            <div className="leading-5 tracking-tight text-zinc-500 text-sm font-semibold">{role}</div>
                                         </div>
                                     </div>
                                 </div>
