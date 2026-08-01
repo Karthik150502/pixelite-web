@@ -113,34 +113,10 @@ export default function CTAWithVerticalMarquee() {
         <div className="min-h-screen bg-background text-foreground flex items-center justify-center px-6 py-12 overflow-hidden">
             <div className="w-full max-w-7xl animate-fade-in-up">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
-                    {/* Left Content */}
-                    <div className="space-y-6 max-w-xl">
-                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-medium leading-tight tracking-tight text-foreground animate-fade-in-up [animation-delay:200ms]">
-                            Impressed by our work?
-                        </h1>
-                        <p className="text-lg md:text-xl text-muted-foreground leading-relaxed animate-fade-in-up [animation-delay:400ms]">
-                            Freeze the beautiful moments of your precious life and preserve it in the most surreal way possible
-                        </p>
-                        <div className="flex flex-wrap gap-4 animate-fade-in-up [animation-delay:600ms]">
-                            <button className="group relative px-6 py-3 bg-foreground text-background rounded-md font-medium overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                                <span className="relative z-10">Check out the Services</span>
-                                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
-                            </button>
-                            <button className="group relative px-6 py-3 bg-secondary text-secondary-foreground rounded-md font-medium overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg border border-border"
-                                onClick={() => {
-                                    window.open("https://cal.com/karthikj_150502/15min", "_blank")
-                                }}
-                            >
-                                <span className="relative z-10">Book a 15 minute call</span>
-                                <div className="absolute inset-0 bg-linear-to-r from-transparent via-foreground/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Right Marquee */}
+                    {/* Left Marquee */}
                     <div ref={marqueeRef} className="relative h-150 lg:h-175 flex items-center justify-center animate-fade-in-up [animation-delay:400ms]">
                         <div className="relative w-full h-full">
-                            <VerticalMarquee speed={20} className="h-full">
+                            <VerticalMarquee speed={10} className="h-full">
                                 {marqueeItems.map((item, idx) => (
                                     <div
                                         key={idx}
@@ -157,6 +133,30 @@ export default function CTAWithVerticalMarquee() {
                             {/* Bottom vignette */}
                             <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-64 bg-linear-to-t from-background via-background/50 to-transparent z-10"></div>
                         </div>
+                    </div>
+
+                    {/* Right Content */}
+                    <div className="space-y-6 max-w-xl">
+                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-medium leading-tight tracking-tight text-foreground animate-fade-in-up [animation-delay:200ms]">
+                            Impressed by our work?
+                        </h1>
+                        <div className="flex flex-wrap gap-4 animate-fade-in-up [animation-delay:600ms]">
+                            <button className="group relative px-6 py-3 bg-foreground text-background rounded-md font-medium overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                                <span className="relative z-10">Check out the Services</span>
+                                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
+                            </button>
+                            <button className="group relative px-6 py-3 bg-secondary text-secondary-foreground rounded-md font-medium overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg border border-border"
+                                onClick={() => {
+                                    window.open("https://cal.com/karthikj_150502/15min", "_blank")
+                                }}
+                            >
+                                <span className="relative z-10">Book a 15 minute call</span>
+                                <div className="absolute inset-0 bg-linear-to-r from-transparent via-foreground/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
+                            </button>
+                        </div>
+                        <p className="text-lg md:text-xl text-muted-foreground leading-relaxed animate-fade-in-up [animation-delay:400ms]">
+                            Freeze the beautiful moments of your precious life and preserve it in the most surreal way possible
+                        </p>
                     </div>
                 </div>
             </div>
