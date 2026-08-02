@@ -117,13 +117,13 @@ export default function CTAWithVerticalMarquee() {
                     {/* Left Marquee */}
                     <div ref={marqueeRef} className="relative h-150 lg:h-175 flex items-center justify-center animate-fade-in-up [animation-delay:400ms]">
                         <div
-                            className="relative w-full h-full [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)] [-webkit-mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)]"
+                            className="relative w-full h-full mask-[linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)] [-webkit-mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)]"
                         >
                             <VerticalMarquee speed={10} className="h-full">
                                 {marqueeItems.map((item, idx) => (
                                     <div
                                         key={idx}
-                                        className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tight py-8 marquee-item"
+                                        className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tight py-8 marquee-item text-right"
                                     >
                                         {item}
                                     </div>
