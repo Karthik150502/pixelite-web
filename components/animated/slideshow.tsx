@@ -85,6 +85,7 @@ const GAP_PX = 2;
 const MARGIN_PX = 2;
 
 const CONTROLS_HIDE_DELAY_MS = 5000;
+const IMAGE_STAY_DURATION = 4000;
 
 function Thumbnails({ index, setIndex, controlsVisible }: {
     index: number,
@@ -167,7 +168,7 @@ export default function SlideShow() {
     const [index, setIndex] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const [isPlaying, setIsPlaying] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(true);
     const [controlsVisible, setControlsVisible] = useState(true);
     const [counterHovered, setCounterHovered] = useState(false);
     const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
@@ -283,7 +284,7 @@ export default function SlideShow() {
 
         const intervalId = setInterval(() => {
             setIndex((i) => (i + 1) % items.length);
-        }, 8000);
+        }, IMAGE_STAY_DURATION);
 
         return () => clearInterval(intervalId);
     }, [isPlaying, isDragging]);
