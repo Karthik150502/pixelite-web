@@ -25,11 +25,10 @@ interface MediaContentCollection {
 
 const sampleMediaContent: MediaContentCollection = {
     video: {
-        src: 'https://dl.dropboxusercontent.com/scl/fi/5d9bqrfd55oznzgthqdxp/videoplayback.mp4?rlkey=zl1hnn28hqauzloih7ph1kpqp&st=d50eauo5&raw=1',
+        src: '/assets/home/wedding-loop.mp4',
         poster:
             'https://images.pexels.com/videos/5752729/space-earth-universe-cosmos-5752729.jpeg',
-        background:
-            'https://dl.dropboxusercontent.com/scl/fi/58ib1gm0njzzlmpzacaxb/wp15155293.jpg?rlkey=urbw48p135mwl16taoi9h4oy2&st=mweusarg',
+        background: '/assets/home/wedding-bg.jpg',
         title: "Julia and Jacob's journey",
         // date: 'Anjali and Arjun',
         scrollToExpand: 'Scroll to Expand Demo',
