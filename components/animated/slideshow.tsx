@@ -1,8 +1,8 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue, animate } from 'framer-motion';
+import { motion, useMotionValue, animate, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { Maximize, Minimize, Pause, Play, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Maximize, Minimize, Pause, Play, ChevronLeft, ChevronRight, Info, X } from 'lucide-react';
 
 const items = [
     {
@@ -85,7 +85,7 @@ const GAP_PX = 2;
 const MARGIN_PX = 2;
 
 const CONTROLS_HIDE_DELAY_MS = 5000;
-const IMAGE_STAY_DURATION = 4000;
+const IMAGE_STAY_DURATION = 8000;
 
 function Thumbnails({ index, setIndex, controlsVisible }: {
     index: number,
@@ -169,10 +169,10 @@ export default function SlideShow() {
     const [isDragging, setIsDragging] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [isPlaying, setIsPlaying] = useState(true);
+    const [infoOpen, setInfoOpen] = useState(false);
+    const [prevIndexForInfo, setPrevIndexForInfo] = useState(0);
     const [controlsVisible, setControlsVisible] = useState(true);
     const [counterHovered, setCounterHovered] = useState(false);
-    const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
-    const [naturalSizes, setNaturalSizes] = useState<Record<number, { width: number, height: number }>>({});
     const containerRef = useRef<HTMLDivElement>(null);
     const rootRef = useRef<HTMLDivElement>(null);
     const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -180,6 +180,14 @@ export default function SlideShow() {
     const [inView, setInView] = useState(false);
 
     const x = useMotionValue(0);
+
+    // Close the details drawer whenever the visible slide changes. Done
+    // during render (rather than in an effect) so the reset is applied
+    // before paint instead of triggering an extra commit.
+    if (index !== prevIndexForInfo) {
+        setPrevIndexForInfo(index);
+        setInfoOpen(false);
+    }
 
     useEffect(() => {
         const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
@@ -200,37 +208,6 @@ export default function SlideShow() {
         observer.observe(el);
         return () => observer.disconnect();
     }, []);
-
-    // Track the carousel's box so we can work out exactly where each
-    // object-contain image is actually rendered (it's letterboxed inside a full-size box).
-    useEffect(() => {
-        const el = containerRef.current;
-        if (!el) return;
-
-        const updateSize = () => setContainerSize({ width: el.offsetWidth, height: el.offsetHeight });
-        updateSize();
-
-        const observer = new ResizeObserver(updateSize);
-        observer.observe(el);
-        return () => observer.disconnect();
-    }, []);
-
-    // Given the container's box and an image's natural dimensions, work out the
-    // rectangle the image is actually drawn into (object-contain letterboxes it).
-    const getImageRect = (itemId: number) => {
-        const natural = naturalSizes[itemId];
-        if (!natural || !containerSize.width || !containerSize.height) return null;
-
-        const scale = Math.min(containerSize.width / natural.width, containerSize.height / natural.height);
-        const renderedWidth = natural.width * scale;
-        const renderedHeight = natural.height * scale;
-
-        return {
-            left: (containerSize.width - renderedWidth) / 2,
-            width: renderedWidth,
-            bottom: (containerSize.height - renderedHeight) / 2,
-        };
-    };
 
     // Controls are only ever auto-hidden while in fullscreen; outside of it they're always shown.
     const effectiveControlsVisible = isFullscreen ? controlsVisible : true;
@@ -343,62 +320,30 @@ export default function SlideShow() {
                     }}
                     style={{ x }}
                 >
-                    {items.map((item, i) => {
-                        const imageRect = getImageRect(item.id);
-
-                        return (
-                            <div key={item.id} className='relative shrink-0 w-full h-full overflow-hidden'>
-                                <Image
-                                    src={item.url}
-                                    alt=''
-                                    aria-hidden='true'
-                                    fill
-                                    sizes='100vw'
-                                    loading={i === 0 ? 'eager' : 'lazy'}
-                                    className='object-cover scale-110 blur-2xl select-none pointer-events-none'
-                                    draggable={false}
-                                />
-                                <Image
-                                    src={item.url}
-                                    alt={item.title}
-                                    fill
-                                    sizes='100vw'
-                                    loading={i === 0 ? 'eager' : 'lazy'}
-                                    fetchPriority={i === 0 ? 'high' : 'auto'}
-                                    className='relative object-contain select-none pointer-events-none'
-                                    draggable={false}
-                                    onLoad={(e) => {
-                                        const img = e.currentTarget;
-                                        setNaturalSizes((prev) => ({
-                                            ...prev,
-                                            [item.id]: { width: img.naturalWidth, height: img.naturalHeight },
-                                        }));
-                                    }}
-                                />
-                                {imageRect && (
-                                    <motion.div
-                                        className='absolute pt-16 pb-8 px-6 text-right'
-                                        style={{
-                                            left: imageRect.left,
-                                            width: imageRect.width,
-                                            textShadow: '2px 3px 6px rgba(0,0,0,0.85)',
-                                        }}
-                                        animate={{
-                                            bottom: effectiveControlsVisible ? imageRect.bottom + 75 : imageRect.bottom + 8,
-                                        }}
-                                        transition={{ duration: 0.4, ease: 'easeInOut' }}
-                                    >
-                                        <p className='uppercase text-white font-semibold tracking-wide text-xl sm:text-2xl'>
-                                            {item.title}
-                                        </p>
-                                        <p className='lowercase text-white text-sm m:text-base whitespace-pre-line'>
-                                            {item.subTitle}
-                                        </p>
-                                    </motion.div>
-                                )}
-                            </div>
-                        );
-                    })}
+                    {items.map((item, i) => (
+                        <div key={item.id} className='relative shrink-0 w-full h-full overflow-hidden'>
+                            <Image
+                                src={item.url}
+                                alt=''
+                                aria-hidden='true'
+                                fill
+                                sizes='100vw'
+                                loading={i === 0 ? 'eager' : 'lazy'}
+                                className='object-cover scale-110 blur-2xl select-none pointer-events-none'
+                                draggable={false}
+                            />
+                            <Image
+                                src={item.url}
+                                alt={item.title}
+                                fill
+                                sizes='100vw'
+                                loading={i === 0 ? 'eager' : 'lazy'}
+                                fetchPriority={i === 0 ? 'high' : 'auto'}
+                                className='relative object-contain select-none pointer-events-none'
+                                draggable={false}
+                            />
+                        </div>
+                    ))}
                 </motion.div>
 
                 {/* Previous Button */}
@@ -472,6 +417,34 @@ export default function SlideShow() {
                 <Thumbnails index={index} setIndex={setIndex} controlsVisible={effectiveControlsVisible} />
             </div>
 
+            {/* Image Details Drawer */}
+            <AnimatePresence>
+                {infoOpen && (
+                    <motion.div
+                        key={items[index].id}
+                        className='absolute inset-x-0 bottom-0 z-30 rounded-t-2xl border-t border-white/10 bg-black/40 backdrop-blur-2xl px-6 pt-6 pb-20 md:pb-8'
+                        initial={{ y: '100%' }}
+                        animate={{ y: 0 }}
+                        exit={{ y: '100%' }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 32 }}
+                    >
+                        <button
+                            onClick={() => setInfoOpen(false)}
+                            aria-label='Close details'
+                            className='absolute right-4 top-4 text-white/70 transition-colors hover:text-white'
+                        >
+                            <X size={18} />
+                        </button>
+                        <p className='pr-8 uppercase text-white font-semibold tracking-wide text-lg sm:text-xl'>
+                            {items[index].title}
+                        </p>
+                        <p className='mt-2 text-sm sm:text-base text-white/80 whitespace-pre-line'>
+                            {items[index].subTitle}
+                        </p>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             {/* Play/Pause + Fullscreen Toggle */}
             <motion.div
                 className='fixed right-4 bottom-4 z-40 flex items-center gap-2'
@@ -479,6 +452,20 @@ export default function SlideShow() {
                 animate={{ opacity: playbackControlsVisible ? 1 : 0, y: playbackControlsVisible ? 0 : 20 }}
                 transition={{ duration: 0.4, ease: 'easeInOut' }}
             >
+                <button
+                    onClick={() => {
+                        if (isPlaying) {
+                            setIsPlaying(false);
+                        }
+                        setInfoOpen((o) => !o);
+                    }}
+                    aria-label={infoOpen ? 'Hide image details' : 'Show image details'}
+                    aria-pressed={infoOpen}
+                    className={`text-black w-8 h-8 rounded-full flex items-center justify-center shadow-lg transition-transform bg-white hover:scale-110 hover:opacity-100 ${infoOpen ? 'opacity-100' : 'opacity-50'
+                        }`}
+                >
+                    <Info size={15} />
+                </button>
                 <button
                     onClick={() => setIsPlaying((p) => !p)}
                     aria-label={isPlaying ? 'Pause slideshow' : 'Play slideshow'}
