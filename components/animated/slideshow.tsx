@@ -212,9 +212,9 @@ export default function SlideShow() {
     // Controls are only ever auto-hidden while in fullscreen; outside of it they're always shown.
     const effectiveControlsVisible = isFullscreen ? controlsVisible : true;
 
-    // The play/pause + fullscreen buttons are fixed to the viewport, so gate
-    // them on the section actually being in view (fullscreen always counts,
-    // since the section fills the viewport at that point).
+    // Only actually show the play/pause + fullscreen buttons once the
+    // section has scrolled into view (fullscreen always counts, since the
+    // section fills the viewport at that point).
     const playbackControlsVisible = effectiveControlsVisible && (inView || isFullscreen);
 
     useEffect(() => {
@@ -287,10 +287,30 @@ export default function SlideShow() {
         }
     }, [index, x, isDragging]);
 
+    // The carousel's x offset is computed from the container's pixel width,
+    // which changes whenever fullscreen is toggled (or the window resizes).
+    // Re-snap instantly (no spring) whenever that happens, or the slides end
+    // up stopped partway between two images.
+    useEffect(() => {
+        const el = containerRef.current;
+        if (!el) return;
+
+        const observer = new ResizeObserver(() => {
+            if (isDragging) return;
+            const containerWidth = el.offsetWidth || 1;
+            x.set(-index * containerWidth);
+        });
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, [index, x, isDragging]);
+
     return (
-        <div className='relative w-full h-screen' ref={rootRef}>
+        <div
+            className={`relative w-full h-full overflow-hidden ${isFullscreen ? '' : 'rounded-2xl'}`}
+            ref={rootRef}
+        >
             {/* Main Carousel */}
-            <div className='absolute inset-0 overflow-hidden bg-black' ref={containerRef}>
+            <div className='absolute inset-0 overflow-hidden' ref={containerRef}>
                 <motion.div
                     className='flex h-full'
                     drag='x'
@@ -322,16 +342,18 @@ export default function SlideShow() {
                 >
                     {items.map((item, i) => (
                         <div key={item.id} className='relative shrink-0 w-full h-full overflow-hidden'>
-                            <Image
-                                src={item.url}
-                                alt=''
-                                aria-hidden='true'
-                                fill
-                                sizes='100vw'
-                                loading={i === 0 ? 'eager' : 'lazy'}
-                                className='object-cover scale-110 blur-2xl select-none pointer-events-none'
-                                draggable={false}
-                            />
+                            {
+                                isFullscreen && <Image
+                                    src={item.url}
+                                    alt=''
+                                    aria-hidden='true'
+                                    fill
+                                    sizes='100vw'
+                                    loading={i === 0 ? 'eager' : 'lazy'}
+                                    className='object-cover scale-110 blur-2xl select-none pointer-events-none'
+                                    draggable={false}
+                                />
+                            }
                             <Image
                                 src={item.url}
                                 alt={item.title}
@@ -447,7 +469,7 @@ export default function SlideShow() {
 
             {/* Play/Pause + Fullscreen Toggle */}
             <motion.div
-                className='fixed right-4 bottom-4 z-40 flex items-center gap-2'
+                className='absolute right-4 bottom-4 z-40 flex items-center gap-2'
                 style={{ pointerEvents: playbackControlsVisible ? 'auto' : 'none' }}
                 animate={{ opacity: playbackControlsVisible ? 1 : 0, y: playbackControlsVisible ? 0 : 20 }}
                 transition={{ duration: 0.4, ease: 'easeInOut' }}

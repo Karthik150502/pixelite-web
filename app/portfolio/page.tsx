@@ -9,7 +9,7 @@ export default function Home() {
                 <section id="hero-section" className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden px-6 sm:px-0">
                     <AuroraHeroDemo />
                 </section>
-                <section id="slideshow-section" className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden">
+                <section id="slideshow-section" className="relative flex h-screen w-full flex-col items-center justify-center px-4 py-8 sm:px-8 sm:py-12 md:px-12">
                     <Slideshow />
                 </section>
                 <section className="relative flex w-full flex-col items-center justify-center">
