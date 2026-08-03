@@ -1,41 +1,8 @@
 import { LetsWorkTogether } from "@/components/animated/call-for-action";
-import Demo from "@/components/animated/demo";
 import DemoMarquee from "@/components/animated/demo-marquee";
 import DemoTestimonials from "@/components/animated/demo-testimonials";
+import { ShuffleHero } from "@/components/animated/shuffle-image";
 import { WebGLShader } from "@/components/animated/webgl-shader";
-
-const posts = [
-  {
-    slug: "golden-hour-in-the-dunes",
-    category: "Landscape",
-    title: "Golden Hour in the Dunes",
-    excerpt:
-      "Chasing the last light across shifting sand, and what forty minutes of waiting taught me about patience.",
-    date: "Jun 12, 2026",
-    readTime: "6 min read",
-    gradient: "from-fuchsia-500 via-purple-700 to-[#3d0745]",
-  },
-  {
-    slug: "shooting-weddings-in-the-rain",
-    category: "Weddings",
-    title: "Shooting Weddings in the Rain",
-    excerpt:
-      "Why the worst weather forecast of the season produced our favorite gallery yet.",
-    date: "May 28, 2026",
-    readTime: "8 min read",
-    gradient: "from-[#3d0745] via-purple-950 to-black",
-  },
-  {
-    slug: "a-portrait-lighting-primer",
-    category: "Technique",
-    title: "A Portrait Lighting Primer",
-    excerpt:
-      "Three light setups we return to again and again, broken down frame by frame.",
-    date: "May 09, 2026",
-    readTime: "5 min read",
-    gradient: "from-rose-500 via-fuchsia-700 to-[#3d0745]",
-  },
-];
 
 export default function Home() {
   return (
@@ -58,8 +25,8 @@ export default function Home() {
             </p>
           </div>
         </section>
-        <section className="relative isolate flex w-full flex-col items-center justify-center">
-          <Demo />
+        <section className="relative isolate flex w-full min-h-screen flex-col items-center justify-center">
+          <ShuffleHero />
         </section>
         <section className="relative isolate flex w-full flex-col items-center justify-center">
           <DemoMarquee />

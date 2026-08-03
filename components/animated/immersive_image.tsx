@@ -39,6 +39,7 @@ const ScrollExpandMedia = ({
 
     const sectionRef = useRef<HTMLDivElement | null>(null);
     const trackRef = useRef<HTMLDivElement | null>(null);
+    const videoRef = useRef<HTMLVideoElement | null>(null);
     const isInitialMount = useRef<boolean>(true);
 
     // Reset when switching media type. Done during render (rather than in an
@@ -99,6 +100,21 @@ const ScrollExpandMedia = ({
             window.removeEventListener('resize', handleScroll);
         };
     }, []);
+
+    // iOS Safari's autoplay check looks for the `muted` HTML attribute at
+    // play-time; React only sets it as a JS property, which can lose the
+    // race against Safari's check. Calling play() explicitly once mounted
+    // is the reliable cross-browser fallback for the `autoPlay` attribute.
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        video.muted = true;
+        video.play().catch(() => {
+            // Autoplay blocked; this video is decorative background footage
+            // with no controls, so there's nothing further to do.
+        });
+    }, [mediaSrc]);
 
     useEffect(() => {
         const checkIfMobile = (): void => {
@@ -193,6 +209,7 @@ const ScrollExpandMedia = ({
                                     ) : (
                                         <div className='relative w-full h-full pointer-events-none'>
                                             <video
+                                                ref={videoRef}
                                                 src={mediaSrc}
                                                 poster={posterSrc}
                                                 autoPlay
