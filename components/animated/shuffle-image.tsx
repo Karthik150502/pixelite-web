@@ -15,7 +15,7 @@ export const ShuffleHero = () => {
                 <h3 className="text-4xl md:text-6xl font-semibold text-foreground">
                     Moments, captured for a lifetime
                 </h3>
-                <p className="text-base md:text-lg text-muted-foreground my-4 md:my-6">
+                <p className="text-sm font-light md:text-md text-muted-foreground my-4 md:my-6">
                     From candid portraits to weddings and everything in between, Pixelite
                     Studios turns fleeting moments into stories you&apos;ll want to relive.
                 </p>
