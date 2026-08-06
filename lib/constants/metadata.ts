@@ -1,9 +1,8 @@
 export const NavbarItems = [
   { id: 1, href: "/", label: "home" },
   { id: 2, href: "/portfolio", label: "portfolio" },
-  { id: 4, href: "/blogs", label: "blogs" },
-  { id: 5, href: "/pricing", label: "pricing" },
-  { id: 6, href: "/about", label: "about" },
+  { id: 3, href: "/pricing", label: "pricing" },
+  { id: 4, href: "/about", label: "about" },
 ];
 
 export const cal_dot_com_url = "https://cal.com/karthikj_150502/15min"

@@ -1,6 +1,7 @@
 import { LetsWorkTogether } from "@/components/animated/call-for-action";
 import DemoMarquee from "@/components/animated/demo-marquee";
 import DemoTestimonials from "@/components/animated/demo-testimonials";
+import Footer from "@/components/animated/footer";
 import { ShuffleHero } from "@/components/animated/shuffle-image";
 import { WebGLShader } from "@/components/animated/webgl-shader";
 
@@ -28,9 +29,9 @@ export default function Home() {
         <section className="relative isolate flex w-full min-h-screen flex-col items-center justify-center">
           <ShuffleHero />
         </section>
-        <section className="relative isolate flex w-full flex-col items-center justify-center">
-          <DemoMarquee />
-        </section>
+        {/* <section className="relative isolate flex w-full h-auto flex-col items-center justify-center">
+        </section> */}
+        <DemoMarquee />
         <section className="relative isolate flex w-full flex-col items-center justify-center">
           <DemoTestimonials />
         </section>
@@ -45,11 +46,7 @@ export default function Home() {
 
       </main>
 
-      <footer className="border-t border-zinc-800">
-        <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-4 px-6 py-4 text-sm text-zinc-500 sm:flex-row sm:justify-between sm:px-10">
-          <span>{new Date().getFullYear()} Pixelite Studios</span>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

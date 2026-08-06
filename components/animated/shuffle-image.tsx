@@ -22,7 +22,7 @@ export const ShuffleHero = () => {
                 <Link
                     href="/portfolio#slideshow-section"
                     className={cn(
-                        "inline-block bg-primary text-primary-foreground font-medium py-2 px-4 rounded-md",
+                        "text-sm font-light md:text-md inline-block bg-primary text-primary-foreground font-medium py-2 px-4 rounded-md",
                         "transition-all hover:bg-primary/90 active:scale-95",
                         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     )}
