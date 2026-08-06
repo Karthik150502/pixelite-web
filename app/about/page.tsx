@@ -1,4 +1,5 @@
 import { MinimalistHero } from "@/components/animated/about-hero";
+import Footer from "@/components/animated/footer";
 import { aboutContacts } from "@/lib/constants/metadata";
 
 export default function Home() {
@@ -11,11 +12,7 @@ export default function Home() {
 
             </main>
 
-            <footer className="border-t border-zinc-800">
-                <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-4 px-6 py-4 text-sm text-zinc-500 sm:flex-row sm:justify-between sm:px-10">
-                    <span>{new Date().getFullYear()} Pixelite Studios</span>
-                </div>
-            </footer>
+            <Footer />
         </div >
     );
 }

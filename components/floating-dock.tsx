@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, MotionValue, useMotionValue, useSpring, useTransform } from "framer-motion"
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'

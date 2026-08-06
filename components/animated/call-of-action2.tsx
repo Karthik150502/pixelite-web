@@ -138,11 +138,11 @@ export default function CTAWithVerticalMarquee() {
                             Impressed by our work?
                         </h1>
                         <div className="flex flex-wrap gap-4 animate-fade-in-up [animation-delay:600ms]">
-                            <button className="group relative px-6 py-3 bg-foreground text-background rounded-md font-medium overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                            <button className="text-sm font-light md:text-md group relative px-6 py-3 bg-foreground text-background rounded-md font-medium overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg">
                                 <span className="relative z-10">Check out the Services</span>
                                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
                             </button>
-                            <button className="group relative px-6 py-3 bg-secondary text-secondary-foreground rounded-md font-medium overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg border border-border"
+                            <button className="text-sm font-light md:text-md group relative px-6 py-3 bg-secondary text-secondary-foreground rounded-md font-medium overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg border border-border"
                                 onClick={() => {
                                     window.open(cal_dot_com_url, "_blank")
                                 }}
@@ -151,7 +151,7 @@ export default function CTAWithVerticalMarquee() {
                                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-foreground/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
                             </button>
                         </div>
-                        <p className="text-lg md:text-xl text-muted-foreground leading-relaxed animate-fade-in-up [animation-delay:400ms]">
+                        <p className="text-sm font-light md:text-md text-muted-foreground animate-fade-in-up [animation-delay:400ms]">
                             Freeze the beautiful moments of your precious life and preserve it in the most surreal way possible
                         </p>
                     </div>
