@@ -16,7 +16,7 @@ export default function AuroraHeroDemo() {
                         duration: 0.8,
                         ease: "easeInOut",
                     }}
-                    className="bg-linear-to-b from-foreground to-muted-foreground bg-clip-text text-center text-4xl font-bold tracking-tight text-transparent md:text-6xl"
+                    className="text-center text-4xl font-bold tracking-tight md:text-6xl"
                 >
                     Be Present in the Moment
                 </motion.h1>

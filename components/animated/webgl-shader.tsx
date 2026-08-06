@@ -77,7 +77,7 @@ export function WebGLShader() {
             refs.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, -1)
 
             refs.uniforms = {
-                resolution: { value: [window.innerWidth, window.innerHeight] },
+                resolution: { value: [canvas.clientWidth, canvas.clientHeight] },
                 time: { value: 0.0 },
                 xScale: { value: 1.0 },
                 yScale: { value: 0.5 },
@@ -120,8 +120,8 @@ export function WebGLShader() {
 
         const handleResize = () => {
             if (!refs.renderer || !refs.uniforms) return
-            const width = window.innerWidth
-            const height = window.innerHeight
+            const width = canvas.clientWidth
+            const height = canvas.clientHeight
             refs.renderer.setSize(width, height, false)
             refs.uniforms.resolution.value = [width, height]
         }
@@ -129,10 +129,13 @@ export function WebGLShader() {
         initScene()
         animate()
         window.addEventListener("resize", handleResize)
+        const resizeObserver = new ResizeObserver(handleResize)
+        resizeObserver.observe(canvas)
 
         return () => {
             if (refs.animationId) cancelAnimationFrame(refs.animationId)
             window.removeEventListener("resize", handleResize)
+            resizeObserver.disconnect()
             if (refs.mesh) {
                 refs.scene?.remove(refs.mesh)
                 refs.mesh.geometry.dispose()
@@ -147,7 +150,8 @@ export function WebGLShader() {
     return (
         <canvas
             ref={canvasRef}
-            className="absolute top-0 left-0 -z-10 block h-full w-full"
+            aria-hidden="true"
+            className="absolute inset-x-0 top-0 -z-10 block h-2/3 w-full [mask-image:linear-gradient(to_bottom,black_60%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_60%,transparent_100%)]"
         />
     )
 }
