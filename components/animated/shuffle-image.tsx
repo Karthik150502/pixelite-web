@@ -9,10 +9,10 @@ export const ShuffleHero = () => {
     return (
         <section className="w-full px-8 py-12 grid grid-cols-1 md:grid-cols-2 items-center gap-8 max-w-6xl mx-auto bg-transparent">
             <div>
-                <span className="block mb-4 text-xs md:text-sm text-primary font-medium">
+                <span className="block mb-4 text-xs md:text-sm text-accent font-medium">
                     Behind every frame
                 </span>
-                <h3 className="text-4xl md:text-6xl font-semibold text-foreground">
+                <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tighter">
                     Moments, captured for a lifetime
                 </h3>
                 <p className="text-sm font-light md:text-md text-muted-foreground my-4 md:my-6">
@@ -22,7 +22,7 @@ export const ShuffleHero = () => {
                 <Link
                     href="/portfolio#slideshow-section"
                     className={cn(
-                        "text-sm font-light md:text-md inline-block bg-primary text-primary-foreground font-medium py-2 px-4 rounded-md",
+                        "text-sm font-light md:text-md inline-block bg-primary text-primary-foreground py-2 px-4 rounded-md",
                         "transition-all hover:bg-primary/90 active:scale-95",
                         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     )}

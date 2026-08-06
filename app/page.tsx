@@ -29,8 +29,6 @@ export default function Home() {
         <section className="relative isolate flex w-full min-h-screen flex-col items-center justify-center">
           <ShuffleHero />
         </section>
-        {/* <section className="relative isolate flex w-full h-auto flex-col items-center justify-center">
-        </section> */}
         <DemoMarquee />
         <section className="relative isolate flex w-full flex-col items-center justify-center">
           <DemoTestimonials />

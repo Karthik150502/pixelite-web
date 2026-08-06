@@ -55,7 +55,7 @@ export default function Footer() {
                 </Container>
 
                 <Container delay={0.1} className="h-auto">
-                    <h3 className="text-base font-normal text-foreground capitalize">
+                    <h3 className="text-sm font-normal text-foreground capitalize">
                         Navigate
                     </h3>
                     <ul className="mt-4 text-sm text-zinc-500 space-y-4">
@@ -70,7 +70,7 @@ export default function Footer() {
                 </Container>
 
                 <Container delay={0.2} className="h-auto">
-                    <h3 className="text-base font-normal text-foreground">
+                    <h3 className="text-sm font-normal text-foreground">
                         Connect
                     </h3>
                     <ul className="mt-4 text-sm text-zinc-500 space-y-4">

@@ -86,7 +86,7 @@ export const MinimalistHero = ({
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 1 }}
-                    className="z-20 order-2 md:order-1 text-center md:text-left space-y-2"
+                    className="z-20 order-2 lg:mt-56 md:order-1 text-center md:text-left space-y-2"
                 >
                     <p className="mx-auto max-w-xs text-sm leading-relaxed font-semibold lg:font-normal text-foreground/80 drop-shadow-[0_1px_3px_rgba(0,0,0,0.35)] md:mx-0">{mainText}</p>
                     {
