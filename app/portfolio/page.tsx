@@ -1,4 +1,5 @@
 import CTAWithVerticalMarquee from "@/components/animated/call-of-action2";
+import PorfolioCarousel from "@/components/animated/carousel-demo";
 import Footer from "@/components/animated/footer";
 import AuroraHeroDemo from "@/components/animated/hero-2-demo";
 import Slideshow from "@/components/animated/slideshow";
@@ -13,7 +14,8 @@ export default function Home() {
                     <AuroraHeroDemo />
                 </section>
                 <section id="slideshow-section" className="relative flex h-screen w-full flex-col items-center justify-center px-4 py-8 sm:px-8 sm:py-12 md:px-12">
-                    <Slideshow />
+                    {/* <Slideshow /> */}
+                    <PorfolioCarousel/>
                 </section>
                 <section className="relative flex w-full flex-col items-center justify-center">
                     <CTAWithVerticalMarquee />
