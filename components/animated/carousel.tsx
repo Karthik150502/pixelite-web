@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { createPortal } from "react-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -77,8 +79,17 @@ export function CoverflowCarousel({
         v: number;
         t: number;
     } | null>(null);
+    /** Set mid-gesture once the pointer has moved past a small threshold, so
+        a swipe doesn't also register as a click that opens the lightbox. */
+    const draggedRef = React.useRef(false);
+    /** Card index under the pointer when the gesture started — the frame
+        captures the pointer for dragging, which swallows the child's own
+        click event, so opening the lightbox is driven from here instead. */
+    const pressedIndexRef = React.useRef<number | null>(null);
 
     const [selected, setSelected] = React.useState(0);
+    /** Index of the slide expanded into the lightbox, if any. */
+    const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
 
     /** Nearest whole card, folded back into 0..count-1. */
     const indexAt = React.useCallback(
@@ -171,6 +182,33 @@ export function CoverflowCarousel({
         [clamp, settle],
     );
 
+    // Which card is under a screen point, worked out from each card's live
+    // (post-transform) bounding box rather than native DOM hit-testing —
+    // the frame stacks every card as 3D-rotated, overlapping siblings inside
+    // an `overflow: hidden` + `perspective` ancestor, and browsers don't
+    // reliably resolve `event.target` to the right one of those in that
+    // combination, especially once a neighbour (not the front card) is
+    // clicked. Picking whichever containing card's centre is closest to the
+    // click sidesteps that entirely.
+    const cardIndexAtPoint = (x: number, y: number) => {
+        let bestIndex: number | null = null;
+        let bestDistance = Infinity;
+
+        cardRefs.current.forEach((card, index) => {
+            if (!card) return;
+            const rect = card.getBoundingClientRect();
+            if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) return;
+
+            const distance = Math.abs(x - (rect.left + rect.width / 2));
+            if (distance < bestDistance) {
+                bestDistance = distance;
+                bestIndex = index;
+            }
+        });
+
+        return bestIndex;
+    };
+
     const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
         if (rafRef.current !== null) {
             cancelAnimationFrame(rafRef.current);
@@ -178,6 +216,8 @@ export function CoverflowCarousel({
         }
         event.currentTarget.setPointerCapture(event.pointerId);
         targetRef.current = posRef.current;
+        draggedRef.current = false;
+        pressedIndexRef.current = cardIndexAtPoint(event.clientX, event.clientY);
         dragRef.current = {
             id: event.pointerId,
             x: event.clientX,
@@ -193,6 +233,8 @@ export function CoverflowCarousel({
 
         const pitch = widthRef.current * (1 + gap);
         if (!pitch) return;
+
+        if (Math.abs(event.clientX - drag.x) > 4) draggedRef.current = true;
 
         const now = performance.now();
         const previous = posRef.current;
@@ -213,7 +255,32 @@ export function CoverflowCarousel({
         // Let a flick carry, but never more than two cards.
         const carried = Math.max(-2, Math.min(2, drag.v * 0.18));
         settle(clamp(Math.round(posRef.current + carried)));
+
+        // A tap ends with a pointerup too — only open the lightbox if the
+        // pointer barely moved, i.e. this wasn't actually a swipe.
+        if (!draggedRef.current && pressedIndexRef.current !== null) {
+            setActiveIndex(pressedIndexRef.current);
+        }
     };
+
+    const closeSlide = React.useCallback(() => setActiveIndex(null), []);
+
+    // Esc closes the lightbox, and the page shouldn't scroll behind it.
+    React.useEffect(() => {
+        if (activeIndex === null) return;
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") closeSlide();
+        };
+
+        const { overflow } = document.body.style;
+        document.body.style.overflow = "hidden";
+        window.addEventListener("keydown", handleKeyDown);
+        return () => {
+            document.body.style.overflow = overflow;
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [activeIndex, closeSlide]);
 
     // Card width drives pitch, depth and perspective, so it is the only thing
     // worth measuring — and only when the box actually changes.
@@ -289,17 +356,18 @@ export function CoverflowCarousel({
                                 ref={(node) => {
                                     cardRefs.current[index] = node;
                                 }}
+                                data-slide-index={index}
                                 role="group"
                                 aria-roledescription="slide"
                                 aria-label={`${index + 1} of ${count}`}
                                 className={cn(
-                                    "absolute left-1/2 top-0 aspect-square overflow-hidden rounded-2xl bg-muted shadow-xl will-change-transform",
+                                    "absolute left-1/2 top-0 aspect-square cursor-zoom-in overflow-hidden rounded-2xl bg-muted shadow-xl will-change-transform",
                                     cardClassName,
                                 )}
                                 style={{ width: "var(--cf-card)" }}
                             >
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
+                                <motion.img
+                                    layoutId={`cf-photo-${index}`}
                                     src={slide.src}
                                     alt={slide.alt}
                                     draggable={false}
@@ -375,6 +443,42 @@ export function CoverflowCarousel({
                     ))}
                 </div>
             )}
+
+            {typeof document !== "undefined" &&
+                createPortal(
+                    <AnimatePresence>
+                        {activeIndex !== null && (
+                            <motion.div
+                                className="fixed inset-0 z-100 flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm sm:p-10"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={closeSlide}
+                            >
+                                <motion.img
+                                    layoutId={`cf-photo-${activeIndex}`}
+                                    src={slides[activeIndex].src}
+                                    alt={slides[activeIndex].alt}
+                                    onClick={(event) => event.stopPropagation()}
+                                    // The backdrop's own padding is the only inset — this
+                                    // grows to fill whatever room that leaves, so the image
+                                    // is as large as it can be while still fitting on screen.
+                                    className="h-auto w-auto max-h-full max-w-full object-contain shadow-2xl"
+                                />
+
+                                <button
+                                    type="button"
+                                    aria-label="Close"
+                                    onClick={closeSlide}
+                                    className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/40 text-white backdrop-blur-xl transition-colors hover:bg-black/60 sm:right-8 sm:top-8"
+                                >
+                                    <X size={18} />
+                                </button>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>,
+                    document.body,
+                )}
         </div>
     );
 }
