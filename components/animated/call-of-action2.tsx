@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { cal_dot_com_url } from "@/lib/constants/metadata";
 import { cn } from "@/lib/utils";
 import { ReactNode, useEffect, useRef } from "react";
@@ -138,11 +139,14 @@ export default function CTAWithVerticalMarquee() {
                             Impressed by our work?
                         </h1>
                         <div className="flex flex-wrap gap-4 animate-fade-in-up [animation-delay:600ms]">
-                            <button className="text-sm font-light md:text-md group relative px-6 py-3 bg-foreground text-background rounded-md font-medium overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                                <span className="relative z-10">Check out the Services</span>
+                            <Link
+                                href="/pricing"
+                                className="text-sm font-light md:text-md group relative px-6 py-3 bg-foreground text-background rounded-md overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                            >
+                                <span className="relative z-10">Check out our Services</span>
                                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700"></div>
-                            </button>
-                            <button className="text-sm font-light md:text-md group relative px-6 py-3 bg-secondary text-secondary-foreground rounded-md font-medium overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg border border-border"
+                            </Link>
+                            <button className="text-sm font-light md:text-md group relative px-6 py-3 bg-secondary text-secondary-foreground rounded-md overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg border border-border"
                                 onClick={() => {
                                     window.open(cal_dot_com_url, "_blank")
                                 }}
