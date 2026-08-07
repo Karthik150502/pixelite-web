@@ -109,7 +109,7 @@ export function LetsWorkTogether({ headTitle, title, title2, subTitle }: Contact
                                 }}
                             />
                             <span
-                                className="text-sm font-medium tracking-wide transition-all duration-500 sm:text-base"
+                                className="text-sm font-light tracking-wide transition-all duration-500 sm:text-base"
                                 style={{
                                     color: isButtonHovered ? "var(--background)" : "var(--foreground)",
                                 }}
