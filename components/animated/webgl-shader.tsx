@@ -151,7 +151,7 @@ export function WebGLShader() {
         <canvas
             ref={canvasRef}
             aria-hidden="true"
-            className="absolute inset-x-0 top-0 -z-10 block h-2/3 w-full [mask-image:linear-gradient(to_bottom,black_60%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_60%,transparent_100%)]"
+            className="absolute inset-x-0 top-0 -z-10 block h-2/3 w-full mask-[linear-gradient(to_bottom,black_60%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_60%,transparent_100%)]"
         />
     )
 }
