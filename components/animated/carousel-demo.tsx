@@ -17,6 +17,7 @@ const SLIDES = [
         title: "Tidewater",
         subtitle:
             "An underwater portrait session at golden hour, where the diver's silhouette dissolves into the colour of the evening tide.",
+        packageName: "Portrait Session",
     },
     {
         src: `${R2}/821d815affa6496c39cbdeeec7a84603.jpg`,
@@ -24,6 +25,7 @@ const SLIDES = [
         title: "Nightshift",
         subtitle:
             "A double-exposure portrait layered over the city skyline, shot on location for a client's dusk-till-dark brand story.",
+        packageName: "Corporate & Events",
     },
     {
         src: `${R2}/937438c560ada1c83317f2c11b3454b0.jpg`,
@@ -31,6 +33,7 @@ const SLIDES = [
         title: "Overexposed",
         subtitle:
             "A deliberately overexposed profile portrait, captured mid-motion against a deep amber studio backdrop for an editorial series.",
+        packageName: "Portrait Session",
     },
     {
         src: `${R2}/98f89cb9994f5c382ab964062c4039db.jpg`,
@@ -38,6 +41,7 @@ const SLIDES = [
         title: "Slow Bloom",
         subtitle:
             "A sports portrait reimagined for personal branding, the racket dissolving into a swirl of dusk light and long exposure.",
+        packageName: "Portrait Session",
     },
     {
         src: `${R2}/ddcbee38be8b7274e19e132d7ab35b53.jpg`,
@@ -45,6 +49,7 @@ const SLIDES = [
         title: "Open Palm",
         subtitle:
             "A conceptual detail shot from an engagement shoot, with a bird cut loose between the fingers to mark a new beginning.",
+        packageName: "Pre-Wedding",
     },
     {
         src: UNSPLASH("1470071459604-3b5ec3a7fe05"),
@@ -52,6 +57,7 @@ const SLIDES = [
         title: "Low Country",
         subtitle:
             "Fog rolling through a forested valley at first light, from a pre-dawn scouting trip ahead of a forest wedding.",
+        packageName: "Wedding Essentials",
     },
     {
         src: UNSPLASH("1500534314209-a25ddb2bd429"),
@@ -59,6 +65,7 @@ const SLIDES = [
         title: "Dry Season",
         subtitle:
             "A sunlit dune ridge under a hard blue sky, captured while scouting locations for an upcoming desert elopement.",
+        packageName: "Wedding Premium",
     },
     {
         src: UNSPLASH("1441974231531-c6227db76b6e"),
@@ -66,6 +73,7 @@ const SLIDES = [
         title: "Understory",
         subtitle:
             "Sunlight breaking through a dense stand of trees — one quiet frame from a couple's forest engagement session.",
+        packageName: "Pre-Wedding",
     },
     {
         src: UNSPLASH("1493246507139-91e8fad9978e"),
@@ -73,6 +81,7 @@ const SLIDES = [
         title: "Paper Lantern",
         subtitle:
             "Coloured smoke drifting against a pale backdrop, the opening frame from a birthday celebration shoot.",
+        packageName: "Corporate & Events",
     },
     {
         src: UNSPLASH("1501785888041-af3ef285b470"),
@@ -80,6 +89,7 @@ const SLIDES = [
         title: "Still Water",
         subtitle:
             "A mountain lake mirroring the ridgeline at dusk, from a weekend recce for a destination wedding in the hills.",
+        packageName: "Wedding Premium",
     },
     {
         src: UNSPLASH("1465101162946-4377e57745c3"),
@@ -87,6 +97,7 @@ const SLIDES = [
         title: "Third Rail",
         subtitle:
             "Long-exposure light trails over a quiet stretch of road, shot for a corporate client's brand campaign.",
+        packageName: "Corporate & Events",
     },
     {
         src: UNSPLASH("1519681393784-d120267933ba"),
@@ -94,6 +105,7 @@ const SLIDES = [
         title: "Undertow",
         subtitle:
             "A snow-covered peak catching the first cold light of morning, framed during a winter elopement in the mountains.",
+        packageName: "Wedding Premium",
     },
 ];
 

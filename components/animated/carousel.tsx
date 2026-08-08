@@ -2,8 +2,9 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ArrowUpRight, ChevronLeft, ChevronRight, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -16,6 +17,9 @@ export interface CoverflowSlide {
     title?: string;
     subtitle?: string;
     meta?: { label: string; value: string }[];
+    /** Pricing plan this shot showcases — shown beside the title, and links
+        through to that plan's details modal on the pricing page. */
+    packageName?: string;
 }
 
 export interface CoverflowCarouselProps {
@@ -405,13 +409,29 @@ export function CoverflowCarousel({
                     key={selected}
                     className="mt-2 flex flex-col items-center px-6 duration-300 animate-in fade-in"
                 >
-                    <p className="text-[15px] font-semibold tracking-tight text-foreground">
-                        {active.title}
-                    </p>
+                    <div className="flex flex-wrap items-center justify-center gap-2">
+                        <p className="text-[15px] font-semibold tracking-tight text-foreground">
+                            {active.title}
+                        </p>
+                        {active.packageName && (
+                            <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[11px] font-medium text-foreground/80">
+                                {active.packageName}
+                            </span>
+                        )}
+                    </div>
                     {active.subtitle && (
-                        <p className="mt-1 text-[13px] text-muted-foreground">
+                        <p className="mt-1 max-w-md text-center text-[13px] text-muted-foreground">
                             {active.subtitle}
                         </p>
+                    )}
+                    {active.packageName && (
+                        <Link
+                            href={`/pricing?plan=${encodeURIComponent(active.packageName)}`}
+                            className="group mt-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-foreground underline decoration-from-font underline-offset-4 transition-colors hover:text-foreground/80"
+                        >
+                            Check out the package
+                            <ArrowUpRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        </Link>
                     )}
                     {active.meta && active.meta.length > 0 && (
                         <dl className="mt-10 w-full max-w-[230px] text-[12px]">
